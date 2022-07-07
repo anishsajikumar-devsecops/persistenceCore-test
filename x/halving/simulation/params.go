@@ -11,6 +11,7 @@ import (
 
 	simulationTypes "github.com/cosmos/cosmos-sdk/types/simulation"
 	"github.com/cosmos/cosmos-sdk/x/simulation"
+
 	"github.com/persistenceOne/persistenceCore/x/halving/types"
 )
 

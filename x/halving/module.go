@@ -19,13 +19,14 @@ import (
 	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
 	"github.com/gorilla/mux"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
+	"github.com/spf13/cobra"
+	abci "github.com/tendermint/tendermint/abci/types"
+
 	"github.com/persistenceOne/persistenceCore/x/halving/client/cli"
 	"github.com/persistenceOne/persistenceCore/x/halving/client/rest"
 	"github.com/persistenceOne/persistenceCore/x/halving/keeper"
 	"github.com/persistenceOne/persistenceCore/x/halving/simulation"
 	"github.com/persistenceOne/persistenceCore/x/halving/types"
-	"github.com/spf13/cobra"
-	abci "github.com/tendermint/tendermint/abci/types"
 )
 
 var (

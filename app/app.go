@@ -14,6 +14,10 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/CosmWasm/wasmd/x/wasm"
+	wasmClient "github.com/CosmWasm/wasmd/x/wasm/client"
+	wasmKeeper "github.com/CosmWasm/wasmd/x/wasm/keeper"
+	wasmTypes "github.com/CosmWasm/wasmd/x/wasm/types"
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/grpc/tmservice"
@@ -94,14 +98,9 @@ import (
 	ibcCoreClient "github.com/cosmos/ibc-go/v3/modules/core/02-client"
 	ibcClient "github.com/cosmos/ibc-go/v3/modules/core/02-client/client"
 	ibcClientTypes "github.com/cosmos/ibc-go/v3/modules/core/02-client/types"
-	ibcConnectionTypes "github.com/cosmos/ibc-go/v3/modules/core/03-connection/types"
 	ibcTypes "github.com/cosmos/ibc-go/v3/modules/core/05-port/types"
 	ibcHost "github.com/cosmos/ibc-go/v3/modules/core/24-host"
 	ibcKeeper "github.com/cosmos/ibc-go/v3/modules/core/keeper"
-	"github.com/CosmWasm/wasmd/x/wasm"
-	wasmClient "github.com/CosmWasm/wasmd/x/wasm/client"
-	wasmTypes "github.com/CosmWasm/wasmd/x/wasm/types"
-	wasmKeeper "github.com/CosmWasm/wasmd/x/wasm/keeper"
 	"github.com/gogo/protobuf/grpc"
 	"github.com/gorilla/mux"
 	"github.com/rakyll/statik/fs"
@@ -234,9 +233,9 @@ type Application struct {
 	HalvingKeeper      halving.Keeper
 	WasmKeeper         wasm.Keeper
 
-	moduleManager      *module.Manager
-	configurator       module.Configurator
-	simulationManager  *module.SimulationManager
+	moduleManager     *module.Manager
+	configurator      module.Configurator
+	simulationManager *module.SimulationManager
 
 	// make scoped keepers public for test purposes
 	ScopedIBCKeeper      capabilityKeeper.ScopedKeeper
@@ -288,12 +287,12 @@ func NewApplication(
 	transientStoreKeys := sdk.NewTransientStoreKeys(paramsTypes.TStoreKey)
 	memoryKeys := sdk.NewMemoryStoreKeys(capabilityTypes.MemStoreKey)
 
-	app := &Application {
-		BaseApp: baseApp,
-		legacyAmino: legacyAmino,
-		applicationCodec: applicationCodec,
+	app := &Application{
+		BaseApp:           baseApp,
+		legacyAmino:       legacyAmino,
+		applicationCodec:  applicationCodec,
 		interfaceRegistry: interfaceRegistry,
-		keys: keys,
+		keys:              keys,
 	}
 
 	app.ParamsKeeper = initParamsKeeper(

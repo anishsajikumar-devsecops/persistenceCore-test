@@ -7,10 +7,12 @@ package halving
 
 import (
 	"fmt"
+	"strconv"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	mintTypes "github.com/cosmos/cosmos-sdk/x/mint/types"
+
 	"github.com/persistenceOne/persistenceCore/x/halving/types"
-	"strconv"
 )
 
 func EndBlocker(ctx sdk.Context, k Keeper) {

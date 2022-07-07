@@ -7,12 +7,14 @@ package keeper
 
 import (
 	"fmt"
+
 	mintTypes "github.com/cosmos/cosmos-sdk/x/mint/types"
 	paramsTypes "github.com/cosmos/cosmos-sdk/x/params/types"
 
 	"github.com/tendermint/tendermint/libs/log"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
+
 	"github.com/persistenceOne/persistenceCore/x/halving/types"
 )
 

@@ -165,6 +165,28 @@ proto-gen:
 		tendermintdev/sdk-proto-gen sh ./scripts/protocgen.sh
 
 ###############################################################################
+###                                Linting                                  ###
+###############################################################################
+
+golangci_lint_cmd=github.com/golangci/golangci-lint/cmd/golangci-lint
+
+lint:
+	@echo "--> Running linter"
+	@go run $(golangci_lint_cmd) run --timeout=10m
+
+lint-fix:
+	@echo "--> Running linter"
+	@go run $(golangci_lint_cmd) run --fix --out-format=tab --issues-exit-code=0
+
+.PHONY: lint lint-fix
+
+format:
+	find . -name '*.go' -type f -not -path "./vendor*" -not -path "*.git*" -not -path "./client/docs/statik/statik.go" -not -path "./tests/mocks/*" -not -name '*.pb.go' | xargs gofmt -w -s
+	find . -name '*.go' -type f -not -path "./vendor*" -not -path "*.git*" -not -path "./client/docs/statik/statik.go" -not -path "./tests/mocks/*" -not -name '*.pb.go' | xargs misspell -w
+	find . -name '*.go' -type f -not -path "./vendor*" -not -path "*.git*" -not -path "./client/docs/statik/statik.go" -not -path "./tests/mocks/*" -not -name '*.pb.go' | xargs goimports -w -local github.com/cosmos/cosmos-sdk
+.PHONY: format
+
+###############################################################################
 ###                              Docker                             		###
 ###############################################################################
 
