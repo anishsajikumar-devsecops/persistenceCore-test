@@ -160,6 +160,9 @@ spec:
                     VAL_NAME=$(jq -r ".validators[$VAL_INDEX].name" /configs/validators.json)
                     echo "Validator Index: $VAL_INDEX, Key name: $VAL_NAME"
 
+                    echo "Adding validator keys to keyring"
+                    jq -r ".validators[$VAL_INDEX].mnemonic" /configs/validators.json | persistenceCore keys add $VAL_NAME --recover --keyring-backend='test' --home $CORE_DIR
+                    
                     # Wait for the node to be synced
                     max_tries=10
                     while [[ $(persistenceCore status --home $CORE_DIR 2>&1 | jq ".SyncInfo.catching_up") == true ]]
