@@ -52,25 +52,25 @@ spec:
         - name: test-docker-creds
       initContainers:
         - name: wait-for-genesis
-          image: persistenceone/core
+          image: persistenceone/persistencecore
           imagePullPolicy: Always
           env:
             - name: GENESIS_HOST
-              value: core-genesis.dev-native
+              value: core-genesis.persistence-core-1-devnet
             - name: GENESIS_PORT
               value: "8081"
           command:
             - bash
             - "-c"
             - |
-              while [ $(curl -sw '%{http_code}' http://pstake-genesis.dev-native.svc.cluster.local:8081/node_id -o /dev/null) -ne 200 ]; do
+              while [ $(curl -sw '%{http_code}' http://core-genesis.persistence-core-1-devnet.svc.cluster.local:8081/node_id -o /dev/null) -ne 200 ]; do
                 echo "Genesis validator does not seem to be ready. Waiting for it to start..."
                 sleep 10;
               done
               echo "Ready to start"
               exit 0
         - name: init-validator
-          image: persistenceone/core
+          image: persistenceone/persistencecore
           imagePullPolicy: Always
           env:
             - name: CHAIN_ID
@@ -95,10 +95,10 @@ spec:
               echo "Printing genesis file before init"
               ls -lrht $CORE_DIR/config
 
-              jq -r ".validators[$VAL_INDEX].mnemonic" /configs/validators.json | persistencecore init core --chain-id $CHAIN_ID --home $CORE_DIR --recover
-              jq -r ".validators[$VAL_INDEX].mnemonic" /configs/validators.json | persistencecore keys add $VAL_NAME --recover --keyring-backend='test' --home $CORE_DIR
+              jq -r ".validators[$VAL_INDEX].mnemonic" /configs/validators.json | persistenceCore init core --chain-id $CHAIN_ID --home $CORE_DIR --recover
+              jq -r ".validators[$VAL_INDEX].mnemonic" /configs/validators.json | persistenceCore keys add $VAL_NAME --recover --keyring-backend='test' --home $CORE_DIR
 
-              curl http://pstake-genesis.dev-native.svc.cluster.local:8081/genesis -o $CORE_DIR/config/genesis.json
+              curl http://core-genesis.persistence-core-1-devnet.svc.cluster.local:8081/genesis -o $CORE_DIR/config/genesis.json
               echo "Genesis file that we got....."
               cat $CORE_DIR/config/genesis.json
 
@@ -107,7 +107,7 @@ spec:
 
               echo "Fetching genesis file"
 
-              GENESIS_NODE_P2P=$(curl -s http://pstake-genesis.dev-native.svc.cluster.local:8081/node_id)@pstake-genesis.dev-native.svc.cluster.local:26656
+              GENESIS_NODE_P2P=$(curl -s http://core-genesis.persistence-core-1-devnet.svc.cluster.local:8081/node_id)@core-genesis.persistence-core-1-devnet.svc.cluster.local:26656
               echo "Node P2P: $GENESIS_NODE_P2P"
               sed -i "s/persistent_peers = \"\"/persistent_peers = \"$GENESIS_NODE_P2P\"/g" $CORE_DIR/config/config.toml
               sed -i 's#"tcp://127.0.0.1:26657"#"tcp://0.0.0.0:26657"#g' $CORE_DIR/config/config.toml
@@ -118,7 +118,7 @@ spec:
               echo "Printing the whole config.toml file"
               cat $CORE_DIR/config/config.toml
 
-              curl -s http://pstake-genesis.dev-native.svc.cluster.local:8081/pub_key
+              curl -s http://core-genesis.persistence-core-1-devnet.svc.cluster.local:8081/pub_key
           resources:
             limits:
               cpu: "0.2"
@@ -133,7 +133,7 @@ spec:
               name: addresses
       containers:
         - name: validator
-          image: persistenceone/core
+          image: persistenceone/persistencecore
           imagePullPolicy: Always
           env:
             - name: CHAIN_ID
@@ -148,7 +148,7 @@ spec:
             - "-c"
             - |
               # Starting
-              persistencecore start --home $CORE_DIR
+              persistenceCore start --home $CORE_DIR
           lifecycle:
             postStart:
               exec:
@@ -162,7 +162,7 @@ spec:
 
                     # Wait for the node to be synced
                     max_tries=10
-                    while [[ $(persistencecore status --home $CORE_DIR 2>&1 | jq ".SyncInfo.catching_up") == true ]]
+                    while [[ $(persistenceCore status --home $CORE_DIR 2>&1 | jq ".SyncInfo.catching_up") == true ]]
                     do
                       if [[ max_tries -lt 0 ]]; then echo "Not able to sync with genesis node"; exit 1; fi
                       echo "Still syncing... Sleeping for 15 secs. Tries left $max_tries"
@@ -172,7 +172,7 @@ spec:
 
                     # Run create validator tx command
                     echo "Running txn for create-validator"
-                    persistencecore tx staking create-validator --home $CORE_DIR --pubkey=$(persistencecore tendermint show-validator --home $CORE_DIR) --moniker $VAL_NAME --amount 5000000000uxprt --keyring-backend="test" --chain-id $CHAIN_ID --from $VAL_NAME --commission-rate="0.10" --commission-max-rate="0.20" --commission-max-change-rate="0.01" --min-self-delegation="1000000" --gas="auto" --gas-adjustment 1.5 --yes > /validator.log
+                    persistenceCore tx staking create-validator --home $CORE_DIR --pubkey=$(persistenceCore tendermint show-validator --home $CORE_DIR) --moniker $VAL_NAME --amount 5000000000uxprt --keyring-backend="test" --chain-id $CHAIN_ID --from $VAL_NAME --commission-rate="0.10" --commission-max-rate="0.20" --commission-max-change-rate="0.01" --min-self-delegation="1000000" --gas="auto" --gas-adjustment 1.5 --yes > /validator.log
           resources:
             limits:
               cpu: "1"
@@ -186,7 +186,7 @@ spec:
             - mountPath: /configs
               name: addresses
         - name: exposer-app
-          image: persistenceone/exposer:core
+          image: betterpersist/exposer:core-1-latest-amd64
           imagePullPolicy: Always
           env:
             - name: HOME_DIR
@@ -196,7 +196,7 @@ spec:
             - name: PORT
               value: "8081"
             - name: CLIENT_NAME
-              value: "persistencecore"
+              value: "persistenceCore"
           command: [ "exposer" ]
           resources:
             limits:

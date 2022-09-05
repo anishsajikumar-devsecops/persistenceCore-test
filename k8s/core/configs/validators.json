@@ -3,10 +3,10 @@
     {
       "name": "val1",
       "type": "local",
-      "address": "persistence1pss7nxeh3f9md2vuxku8q99femnwdjtcpe9ky9",
+      "address": "persistence1pqzzhm4mqz42mglmamvlqywc5rj3yy78xun486",
       "pubkey": {
         "@type": "/cosmos.crypto.secp256k1.PubKey",
-        "key": "Aw57xBfOrMyTep3ULDevI1R9/RpoNu3VvKM/w+D0hp7z"
+        "key": "Au6xlyqUS8QynohKhUWvcHZaUjkD8UgsC4m2cLQoLGvA"
       },
       "mnemonic": "opinion knife other balcony surge more bamboo canoe romance ask argue teach anxiety adjust spike mystery wolf alone torch tail six decide wash alley"
     }
@@ -15,30 +15,30 @@
     {
       "name": "val2",
       "type": "local",
-      "address": "persistence16e0p4vwufmsn0lucwsnfmjfx67ry84y47edfwq",
+      "address": "persistence1fu3vvf2vuukkwdwmezxul4cefhjr73uth5gxuz",
       "pubkey": {
         "@type": "/cosmos.crypto.secp256k1.PubKey",
-        "key": "AvRaiAePcKIgKibm9d7LO/2DLd1p7FaDeua+ilvf4p+A"
+        "key": "AgkD6JVS6YdOo7y8wzFA8YTFoknDRuptuqV6L8nOxPOA"
       },
       "mnemonic": "logic help only text door wealth hurt always remove glory viable income agent olive trial female couch old offer crash menu zero pencil thrive"
     },
     {
       "name": "val3",
       "type": "local",
-      "address": "persistence1pn45c2jdwfwrwva0cknfdlnfst28ucpurteeqt",
+      "address": "persistence1fesq066gljs4pezu4hgm55g8yqe4yp3s8uynw0",
       "pubkey": {
         "@type": "/cosmos.crypto.secp256k1.PubKey",
-        "key": "A2eBCH+BVDXjVkJDZQE5RhKL3jN3apLqCTIjzXzWbMxJ"
+        "key": "Aro4cbZQKnv5gnyX6X5XlI5+W/3VU3Pv9wsQw30/AnsK"
       },
       "mnemonic": "middle weather hip ghost quick oxygen awful library broken chicken tackle animal crunch appear fee indoor fitness enough orphan trend tackle faint eyebrow all"
     },
     {
       "name": "val4",
       "type": "local",
-      "address": "persistence1y3x3uaqnnlhulway8g5dvm4erpd5r4f0d29hn5",
+      "address": "persistence1ut9qyskm5vzykagpglzdjs6lr9e5tapaexxz63",
       "pubkey": {
         "@type": "/cosmos.crypto.secp256k1.PubKey",
-        "key": "Agn5q1U2vLjdAhg4dcKuUKm3ZwdmrrFmVnlnqsqkXoIA"
+        "key": "AzmN60JbaW38JNqjFdRxTkRVs6BaLoCP/fiqt6/qRLER"
       },
       "mnemonic": "tag apart multiply food bleak isolate describe stand guide field session design cable combine excess shrug abuse pause course ketchup umbrella program labor ripple"
     }

@@ -1,4 +1,4 @@
-PROCESS=persistencecore
+PROCESS=core
 
 apply:
 	kubectl apply -k $(PROCESS)

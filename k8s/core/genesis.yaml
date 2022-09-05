@@ -60,7 +60,7 @@ spec:
         - name: test-docker-creds
       initContainers:
         - name: init-genesis
-          image: persistenceone/core
+          image: persistenceone/persistencecore
           imagePullPolicy: Always
           env:
             - name: COINS
@@ -79,30 +79,30 @@ spec:
               VAL_INDEX=${HOSTNAME##*-}
               echo "Validator Index: $VAL_INDEX"
               
-              persistencecore init core --chain-id $CHAIN_ID --home $CORE_DIR
-              jq -r ".genesis[0].mnemonic" /configs/validators.json | persistencecore keys add $(jq -r ".genesis[0].name" /configs/validators.json) --recover --keyring-backend='test' --home $CORE_DIR
+              persistenceCore init core --chain-id $CHAIN_ID --home $CORE_DIR
+              jq -r ".genesis[0].mnemonic" /configs/validators.json | persistenceCore keys add $(jq -r ".genesis[0].name" /configs/validators.json) --recover --keyring-backend='test' --home $CORE_DIR
               
               # Provide genesis validator self deligations
-              persistencecore add-genesis-account $(jq -r .genesis[$i].address /configs/validators.json) $COINS --keyring-backend='test' --home $CORE_DIR
+              persistenceCore add-genesis-account $(jq -r .genesis[$i].address /configs/validators.json) $COINS --keyring-backend='test' --home $CORE_DIR
               
               # Give Validator addresses initial coins
               for ((i=0; i<$(jq -r '.validators | length' /configs/validators.json); i++))
               do
-                jq -r ".validators[$i].mnemonic" /configs/validators.json | persistencecore keys add $(jq -r ".validators[$i].name" /configs/validators.json) --recover --keyring-backend='test' --home $CORE_DIR
-                persistencecore add-genesis-account $(jq -r .validators[$i].address /configs/validators.json) $COINS --keyring-backend='test' --home $CORE_DIR
+                jq -r ".validators[$i].mnemonic" /configs/validators.json | persistenceCore keys add $(jq -r ".validators[$i].name" /configs/validators.json) --recover --keyring-backend='test' --home $CORE_DIR
+                persistenceCore add-genesis-account $(jq -r .validators[$i].address /configs/validators.json) $COINS --keyring-backend='test' --home $CORE_DIR
               done
               
               for ((i=0; i<$(jq -r '.keys | length' /configs/keys.json); i++))
               do
-                jq -r ".keys[$i].mnemonic" /configs/orchestrator.json | persistencecore keys add $(jq -r ".keys[$i].name" /configs/orchestrator.json) --recover --keyring-backend='test' --home $CORE_DIR
+                jq -r ".keys[$i].mnemonic" /configs/orchestrator.json | persistenceCore keys add $(jq -r ".keys[$i].name" /configs/orchestrator.json) --recover --keyring-backend='test' --home $CORE_DIR
               done
               
-              persistencecore gentx $(jq -r ".genesis[0].name" /configs/validators.json) 5000000000uxprt --keyring-backend="test" --chain-id $CHAIN_ID --home $CORE_DIR
+              persistenceCore gentx $(jq -r ".genesis[0].name" /configs/validators.json) 5000000000uxprt --keyring-backend="test" --chain-id $CHAIN_ID --home $CORE_DIR
               echo "Output of gentx"
               cat $CORE_DIR/config/gentx/*.json | jq
               
               echo "Running collect-gentxs"
-              persistencecore collect-gentxs --home $CORE_DIR
+              persistenceCore collect-gentxs --home $CORE_DIR
               
               sed -i 's#"tcp://127.0.0.1:26657"#"tcp://0.0.0.0:26657"#g' $CORE_DIR/config/config.toml
               sed -i 's/timeout_commit = "5s"/timeout_commit = "1s"/g' $CORE_DIR/config/config.toml
@@ -140,7 +140,7 @@ spec:
               cat $CORE_DIR/config/genesis.json | jq
               
               
-              persistencecore tendermint show-node-id --home $CORE_DIR > /persistencecore/genesis-node-id.txt
+              persistenceCore tendermint show-node-id --home $CORE_DIR > /persistencecore/genesis-node-id.txt
           resources:
             limits:
               cpu: "0.2"
@@ -155,7 +155,7 @@ spec:
               name: addresses
       containers:
         - name: validator
-          image: persistenceone/core
+          image: persistenceone/persistencecore
           imagePullPolicy: Always
           env:
             - name: CHAIN_ID
@@ -169,7 +169,7 @@ spec:
             - bash
             - "-c"
             - |
-              persistencecore start --home $CORE_DIR
+              persistenceCore start --home $CORE_DIR
           resources:
             limits:
               cpu: "1"
@@ -183,7 +183,7 @@ spec:
             - mountPath: /configs
               name: addresses
         - name: exposer-app
-          image: persistenceone/exposer:core
+          image: betterpersist/exposer:core-1-latest-amd64
           imagePullPolicy: Always
           env:
             - name: HOME_DIR
@@ -193,7 +193,7 @@ spec:
             - name: PORT
               value: "8081"
             - name: CLIENT_NAME
-              value: "persistencecore"
+              value: "persistenceCore"
           command: [ "exposer" ]
           resources:
             limits:

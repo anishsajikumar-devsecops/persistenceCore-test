@@ -1,4 +1,4 @@
-namespace: dev-native
+namespace: persistence-core-1-devnet
 
 resources:
   - service.yaml
