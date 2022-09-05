@@ -1,0 +1,104 @@
+history | grep "https://rpc.testnet.persistence.one:443"
+history | grep "--node https://rpc.testnet.persistence.one:443 --chain-id test-core-1"
+history | grep '--node https://rpc.testnet.persistence.one:443 --chain-id test-core-1'
+persistenceCore q bank balances persistence1exne32ydd225effyg9lgktp5tvc78cngkuxxxv  --node https://rpc.testnet.persistence.one:443 --chain-id test-core-1
+persistenceCore q ibc channel channels --node https://rpc.testnet.persistence.one:443 | grep 110 -A 10 -B 10
+persistenceCore status --node https://rpc.testnet.persistence.one:443 --log_format json
+persistenceCore tx bank send persistence1pss7nxeh3f9md2vuxku8q99femnwdjtcpe9ky9 persistence12zjl6nn5zuhdz2quhw3vm8pue2g085kvwghv9r 1uxprt --from test --node https://rpc.testnet.persistence.one:443 --chain-id test-core-1 --keyring-backend test -b block
+persistenceCore tx bank send persistence1pss7nxeh3f9md2vuxku8q99femnwdjtcpe9ky9 persistence12zjl6nn5zuhdz2quhw3vm8pue2g085kvwghv9r 1UXPRT --from test --node https://rpc.testnet.persistence.one:443 --chain-id test-core-1 --keyring-backend test -b block
+persistenceCore tx bank send persistence1pss7nxeh3f9md2vuxku8q99femnwdjtcpe9ky9 persistence12zjl6nn5zuhdz2quhw3vm8pue2g085kvwghv9r 1UxPrT --from test --node https://rpc.testnet.persistence.one:443 --chain-id test-core-1 --keyring-backend test -b block
+persistenceCore tx bank send persistence1pss7nxeh3f9md2vuxku8q99femnwdjtcpe9ky9 persistence12zjl6nn5zuhdz2quhw3vm8pue2g085kvwghv9r 1UxPrT --from test --node https://rpc.testnet.persistence.one:443 --chain-id test-core-1 --keyring-backend test
+persistenceCore q tx 9AC8051625E21379B53C42C900F0BD3AE53BA56E3077361A6E02456B1B1658FC --node https://rpc.testnet.persistence.one:443
+persistenceCore tx bank send persistence1pss7nxeh3f9md2vuxku8q99femnwdjtcpe9ky9 persistence12zjl6nn5zuhdz2quhw3vm8pue2g085kvwghv9r 1xprt --from test --node https://rpc.testnet.persistence.one:443 --chain-id test-core-1 --keyring-backend test
+persistenceCore tx bank send persistence1pss7nxeh3f9md2vuxku8q99femnwdjtcpe9ky9 persistence12zjl6nn5zuhdz2quhw3vm8pue2g085kvwghv9r 1xprt --from test --node https://rpc.testnet.persistence.one:443 --chain-id persistencecore --keyring-backend test
+persistenceCore q txs --events wasm-dexter-vault::instantiate._contract_address=persistence1qwdmlm3n990d2zye3rscj49995qwqh92xyledp966k2u6r6hpxvsp65ckv --node https://rpc.testnet.persistence.one:443 --output json > tmp/vault_events_testnet.json
+persistenceCore q gov proposal 142 --node https://rpc.testnet.persistence.one:443
+persistenceCore tx gov deposit 139 512000000uxprt --from test --keyring-backend test --node https://rpc.testnet.persistence.one:443 --chain-id test-core-1 -b block
+persistenceCore tx gov submit-proposal param-change ./change-store-code-permission.json --node https://rpc.testnet.persistence.one:443 --from test --keyring-backend test --fees 100000000uxprt --gas auto --gas-adjustment 2.0  --chain-id test-core-1 -b block
+persistenceCore q wasm params --node https://rpc.testnet.persistence.one:443
+--node https://rpc.testnet.persistence.one:443 \
+persistenceCore tx bank send persistence1pss7nxeh3f9md2vuxku8q99femnwdjtcpe9ky9 persistence1eld9dngatavy9nqu9j0d5ratjvp2887zsnqp6x 1000000000uxprt --from test --keyring-backend test --node https://rpc.testnet.persistence.one:443 --chain-id test-core-1
+--node https://rpc.testnet.persistence.one:443 \
+--node https://rpc.testnet.persistence.one:443 \
+--node https://rpc.testnet.persistence.one:443 \
+--node https://rpc.testnet.persistence.one:443 \
+--node https://rpc.testnet.persistence.one:443 \
+--node https://rpc.testnet.persistence.one:443 \
+--node https://rpc.testnet.persistence.one:443 \
+--node https://rpc.testnet.persistence.one:443 \
+persistenceCore tx bank send persistence1pss7nxeh3f9md2vuxku8q99femnwdjtcpe9ky9 persistence1r8y3cfjckzs67syefxvxpkjhvw4hvf5kyhqggf 1000000000uxprt --from test --keyring-backend test --node https://rpc.testnet.persistence.one:443 --chain-id test-core-1
+--node https://rpc.testnet.persistence.one:443 \
+--node https://rpc.testnet.persistence.one:443 \
+persistenceCore tx bank send persistence1pss7nxeh3f9md2vuxku8q99femnwdjtcpe9ky9 persistence1r8y3cfjckzs67syefxvxpkjhvw4hvf5kyhqggf 100000000uxprt --from test --keyring-backend test --node https://rpc.testnet.persistence.one:443 --chain-id test-core-1
+persistenceCore tx bank balances persistence1exne32ydd225effyg9lgktp5tvc78cngkuxxxv  --node https://rpc.testnet.persistence.one:443 --chain-id test-core-1
+persistenceCore q txs --events wasm-dexter-vault::add_pool.pool_id=1  --node https://rpc.testnet.persistence.one:443 --output json > pool_id_1_testnet.json
+persistenceCore q wasm list-code --node https://rpc.testnet.persistence.one:443 --log_format json --limit 200
+persistenceCore tx bank send persistence1pss7nxeh3f9md2vuxku8q99femnwdjtcpe9ky9 persistence12zjl6nn5zuhdz2quhw3vm8pue2g085kvwghv9r 100000000uxprt --from test --keyring-backend test --node https://rpc.testnet.persistence.one:443 --chain-id test-core-1
+persistenceCore q gov proposal 121 --node https://rpc.testnet.persistence.one:443
+persistenceCore q bank balances persistence1wad5l002k8wsdwtc6jzvd3q0xf3y6vskk8l5r8 --node https://rpc.testnet.persistence.one:443
+persistenceCore q gov proposal 120 --node https://rpc.testnet.persistence.one:443
+persistenceCore tx gov deposit 120 512000000uxprt --from test --keyring-backend test --node https://rpc.testnet.persistence.one:443 --chain-id test-core-1 -b block
+persistenceCore tx gov deposit 120 512000000uxprt --from test --keyring-backend test --node https://rpc.testnet.persistence.one:443 --chain-id test-core-1
+persistenceCore tx gov deposit 120 512000000uxprt --from test --keyring-backend test --node https://rpc.testnet.persistence.one:443 --chain-id test test-core-1
+persistenceCore tx gov deposit 120 512000000uxprt --from test --keyring-backend test --node https://rpc.testnet.persistence.one:443 --chain-test test-core-1
+persistenceCore tx gov deposit 120 512000000uxprt --from test --keyring-backend test --node https://rpc.testnet.persistence.one:443
+persistenceCore tx gov deposit 120 512000000 --from test --keyring-backend test --node https://rpc.testnet.persistence.one:443
+persistenceCore tx gov submit-proposal param-change change-store-code-permission-testnet.json --node https://rpc.testnet.persistence.one:443 --from test --keyring-backend test --fees 100000000uxprt --gas auto --gas-adjustment 2.0  --chain-id test-core-1 -b block
+persistenceCore q gov proposal 119 --node https://rpc.testnet.persistence.one:443
+persistenceCore tx bank send persistence1pss7nxeh3f9md2vuxku8q99femnwdjtcpe9ky9 persistence1tmwydlz0dz8salpju47f2r6m49j5286sc3rgwx 100000000uxprt --from test --keyring-backend test --node https://rpc.testnet.persistence.one:443 --chain-id test-core-1
+persistenceCore tx bank send persistence1pss7nxeh3f9md2vuxku8q99femnwdjtcpe9ky9 persistence1h4zyymqaz00akcl7havymae6n7fq8u4rkqqmdr 100000000uxprt --from test --keyring-backend test --node https://rpc.testnet.persistence.one:443 --chain-id test-core-1
+persistenceCore tx bank send persistence1pss7nxeh3f9md2vuxku8q99femnwdjtcpe9ky9 persistence1wad5l002k8wsdwtc6jzvd3q0xf3y6vskk8l5r8 100000000uxprt --from test --keyring-backend test --node https://rpc.testnet.persistence.one:443 --chain-id test-core-1
+persistenceCore tx bank send persistence1pss7nxeh3f9md2vuxku8q99femnwdjtcpe9ky9 persistence1e76qqc4ux5huvmwvyh8gq3dnyn8qmus8ddvcux 100000000uxprt --from test --keyring-backend test --node https://rpc.testnet.persistence.one:443 --chain-id test-core-1
+persistenceCore q bank balances persistence1qp8flhtcev6ag8av3mwr3eessuq8sxjrlwchsy --node https://rpc.testnet.persistence.one:443
+ersistenceCore q bank balances persistence1qp8flhtcev6ag8av3mwr3eessuq8sxjrlwchsy --node https://rpc.testnet.persistence.one:443
+persistenceCore tx gov submit-proposal param-change change-store-code-permission-testnet.json --node https://rpc.testnet.persistence.one:443 --from test --keyring-backend test --fees 100000000uxprt --gas auto --chain-id test-core-1 -b block
+persistenceCore tx gov submit-proposal param-change change-store-code-permission-testnet.json --node https://rpc.testnet.persistence.one:443 --from test --keyring-backend test --fees 50000000uxprt --gas 10000000000 --chain-id test-core-1 -b block
+persistenceCore q gov proposal 118 --node https://rpc.testnet.persistence.one:443
+persistenceCore tx gov submit-proposal param-change change-store-code-permission.json --node https://rpc.testnet.persistence.one:443 --from test --keyring-backend test --fees 50000000uxprt --gas 10000000000 --chain-id test-core-1 -b block
+--node https://rpc.testnet.persistence.one:443 \
+persistenceCore q tx EE2D29BC5B32DAEA38086C93C8CB087FFEDB2AAE47347E44789FED062EBF6F32 --chain-id "test-core-1" --node https://rpc.testnet.persistence.one:443
+--chain-id "test-core-1" --node https://rpc.testnet.persistence.one:443 --gas 10000000
+--keyring-backend test --from test \ --fees 10000uxprt --chain-id "test-core-1" --node https://rpc.testnet.persistence.one:443 --gas 10000000
+persistenceCore q tx BB23273973F1F74367C3C4A5327A3EED8949EE4CFC87111EF78AEEF6F9BB81E0  --chain-id "test-core-1" --node https://rpc.testnet.persistence.one:443
+persistenceCore tx wasm execute persistence13m30gq3225w3vt96acgxhntvpqugdp3g6uqfj0y689dzce7esgzsmh3dwn '{"join_pool":{"pool_id":"1","assets":[{"amount":"1000000","info":{"native_token":{"denom":"uxprt"}}},{"amount":"480000","info":{"native_token":{"denom":"ibc\\/574CE061906B04FE025C5FB58E791C452C5C10CD83D0501AFB10873843EF8737"}}}],"slippage_tolerance":"0.5"}}' --amount 1000000uxprt,480000ibc\/574CE061906B04FE025C5FB58E791C452C5C10CD83D0501AFB10873843EF8737  --keyring-backend test --from test --gas auto --fees 10000uxprt --chain-id "test-core-1" --node https://rpc.testnet.persistence.one:443 --gas 10000000
+persistenceCore q tx EA296E6C2701965CF7BAA39AABA023CF085E741D57BC12505D0DC1A12A31B917  --chain-id "test-core-1" --node https://rpc.testnet.persistence.one:443
+persistenceCore tx wasm execute persistence13m30gq3225w3vt96acgxhntvpqugdp3g6uqfj0y689dzce7esgzsmh3dwn '{"join_pool":{"pool_id":"1","assets":[{"amount":"1000000","info":{"native_token":{"denom":"uxprt"}}},{"amount":"480000","info":{"native_token":{"denom":"ibc\\/574CE061906B04FE025C5FB58E791C452C5C10CD83D0501AFB10873843EF8737"}}}],"slippage_tolerance":"0.5"}}' --amount 1000000uxprt,480000ibc\/574CE061906B04FE025C5FB58E791C452C5C10CD83D0501AFB10873843EF8737  --keyring-backend test --from test --gas auto --fees 10000uxprt --chain-id "test-core-1" --node https://rpc.testnet.persistence.one:443
+persistenceCore tx wasm execute persistence13m30gq3225w3vt96acgxhntvpqugdp3g6uqfj0y689dzce7esgzsmh3dwn '{"join_pool":{"pool_id":"1","assets":[{"amount":"1000000","info":{"native_token":{"denom":"uxprt"}}},{"amount":"480000","info":{"native_token":{"denom":"ibc\\/574CE061906B04FE025C5FB58E791C452C5C10CD83D0501AFB10873843EF8737"}}}],"slippage_tolerance":"0.5"}}' --amount 1000000uxprt --amount 480000ibc\/574CE061906B04FE025C5FB58E791C452C5C10CD83D0501AFB10873843EF8737  --keyring-backend test --from test --gas auto --fees 10000uxprt --chain-id "test-core-1" --node https://rpc.testnet.persistence.one:443
+persistenceCore tx wasm execute persistence1c20arcj6s6fyc79n0lsv9qztl5p6d7xjdx878u9s6y68qrq35fgqtnkays '{"contractAddress":"persistence13m30gq3225w3vt96acgxhntvpqugdp3g6uqfj0y689dzce7esgzsmh3dwn","msg":{"join_pool":{"pool_id":"1","assets":[{"amount":"1000000","info":{"native_token":{"denom":"uxprt"}}},{"amount":"480000","info":{"native_token":{"denom":"ibc\\/574CE061906B04FE025C5FB58E791C452C5C10CD83D0501AFB10873843EF8737"}}}],"slippage_tolerance":"0.5"}}' --amount 1000000uxprt --amount 480000ibc\/574CE061906B04FE025C5FB58E791C452C5C10CD83D0501AFB10873843EF8737  --keyring-backend test --from test --gas auto --fees 10000uxprt --chain-id "test-core-1" --node https://rpc.testnet.persistence.one:443
+persistenceCore tx bank send persistence1pss7nxeh3f9md2vuxku8q99femnwdjtcpe9ky9 persistence1qp8flhtcev6ag8av3mwr3eessuq8sxjrlwchsy 100000000uxprt --from test --keyring-backend test --node https://rpc.testnet.persistence.one:443 --chain-id test-core-1
+persistenceCore tx bank send persistence1pss7nxeh3f9md2vuxku8q99femnwdjtcpe9ky9 persistence1qp8flhtcev6ag8av3mwr3eessuq8sxjrlwchsy7 100000000uxprt --from test --keyring-backend test --node https://rpc.testnet.persistence.one:443 --chain-id test-core-1
+persistenceCore tx bank send persistence1pss7nxeh3f9md2vuxku8q99femnwdjtcpe9ky9  100000000uxprt --from test --keyring-backend test --node https://rpc.testnet.persistence.one:443 --chain-id test-core-1
+persistenceCore tx bank send persistence1qp8flhtcev6ag8av3mwr3eessuq8sxjrlwchsy7 persistence1pss7nxeh3f9md2vuxku8q99femnwdjtcpe9ky9 100000000uxprt --from test --keyring-backend test --node https://rpc.testnet.persistence.one:443 --chain-id test-core-1
+persistenceCore q ibc-transfer denom-trace 8C275A830F26090ADDE3378B6E0680F1893E4E86B6908F3A4019161C6C78C736 --node https://rpc.testnet.persistence.one:443
+persistenceCore q ibc-transfer denom-trace 574CE061906B04FE025C5FB58E791C452C5C10CD83D0501AFB10873843EF8737 --node https://rpc.testnet.persistence.one:443
+persistenceCore q ibc-transfer denom-traces --node https://rpc.testnet.persistence.one:443
+persistenceCore q bank denom-metadata --node https://rpc.testnet.persistence.one:443
+persistenceCore q ibc channel channels --node https://rpc.testnet.persistence.one:443 | grep 110
+persistenceCore q ibc channel channels --node https://rpc.testnet.persistence.one:443
+persistenceCore q ibc connection connections --node https://rpc.testnet.persistence.one:443
+persistenceCore q ibc channel channels --node https://rpc.testnet.persistence.one:443 | grep 91
+persistenceCore q gov proposal 116 --node https://rpc.testnet.persistence.one:443
+persistenceCore q gov params --node https://rpc.testnet.persistence.one:443
+persistenceCore tx wasm execute persistence1c20arcj6s6fyc79n0lsv9qztl5p6d7xjdx878u9s6y68qrq35fgqtnkays '{"deposit_native": {"denom": "xprt"}}' --amount 1000000uxprt  --keyring-backend test --from test --gas auto --fees 10000uxprt --chain-id "test-core-1" --node https://rpc.testnet.persistence.one:443
+persistenceCore tx wasm execute persistence1c20arcj6s6fyc79n0lsv9qztl5p6d7xjdx878u9s6y68qrq35fgqtnkays  --amount 1000000uxprt  --keyring-backend test --from test --gas auto --fees 10000uxprt --chain-id "test-core-1" --node https://rpc.testnet.persistence.one:443
+persistenceCore q wasm state smart persistence1c20arcj6s6fyc79n0lsv9qztl5p6d7xjdx878u9s6y68qrq35fgqtnkays "{\"config\": {}}" --node https://rpc.testnet.persistence.one:443
+persistenceCore q wasm state smart persistence1c20arcj6s6fyc79n0lsv9qztl5p6d7xjdx878u9s6y68qrq35fgqtnkays '{"config": {}' --node https://rpc.testnet.persistence.one:443
+persistenceCore q wasm state smart persistence1c20arcj6s6fyc79n0lsv9qztl5p6d7xjdx878u9s6y68qrq35fgqtnkays '{'config': {}' --node https://rpc.testnet.persistence.one:443
+persistenceCore q wasm state smart persistence1c20arcj6s6fyc79n0lsv9qztl5p6d7xjdx878u9s6y68qrq35fgqtnkays '' --node https://rpc.testnet.persistence.one:443
+persistenceCore q wasm state smart persistence1c20arcj6s6fyc79n0lsv9qztl5p6d7xjdx878u9s6y68qrq35fgqtnkays --node https://rpc.testnet.persistence.one:443
+persistenceCore q wasm state all persistence1c20arcj6s6fyc79n0lsv9qztl5p6d7xjdx878u9s6y68qrq35fgqtnkays --node https://rpc.testnet.persistence.one:443
+persistenceCore q bank balances persistence19ly7g56ftcska2fjay0y2dgqk3un0ygmywt657 --node https://rpc.testnet.persistence.one:443
+persistenceCore q bank balances persistence1qgh92nngse04lsa7jvrwl6674fkx4pxa5ryr6n --node https://rpc.testnet.persistence.one:443
+persistenceCore q bank balances persistence1anxjfwgx4tz2dk7uzz6m3gccxfyh5vak5pl4yx --node https://rpc.testnet.persistence.one:443
+persistenceCore tx bank send persistence1anxjfwgx4tz2dk7uzz6m3gccxfyh5vak5pl4yx persistence1eaqjqmy90hs82aq4yc5xkahel3auz4yrn90873 1000000ibc/5EB63C96C44E329E2EBEFC269488F1062E8AD88D0F5D168F0411873869924E37 --node https://rpc.testnet.persistence.one:443 --keyring-backend=test --chain-id test-core-1
+persistenceCore tx bank send persistence1anxjfwgx4tz2dk7uzz6m3gccxfyh5vak5pl4yx persistence1eaqjqmy90hs82aq4yc5xkahel3auz4yrn90873 10000ibc/5EB63C96C44E329E2EBEFC269488F1062E8AD88D0F5D168F0411873869924E37 --node https://rpc.testnet.persistence.one:443 --keyring-backend=test --chain-id test-core-1
+persistenceCore q tx DFFB429941D1B0CFDA0E4729A316A5BD28B0ABEFA42C5F86CDB1CF483059CBA0 --node https://rpc.testnet.persistence.one:443  --chain-id test-core-1
+persistenceCore q tx DFFB429941D1B0CFDA0E4729A316A5BD28B0ABEFA42C5F86CDB1CF483059CBA0 --node https://rpc.testnet.persistence.one:443 --keyring-backend=test --chain-id test-core-1
+persistenceCore tx bank send persistence1anxjfwgx4tz2dk7uzz6m3gccxfyh5vak5pl4yx persistence1anxjfwgx4tz2dk7uzz6m3gccxfyh5vak5pl4yx 10000ibc/5EB63C96C44E329E2EBEFC269488F1062E8AD88D0F5D168F0411873869924E37 --node https://rpc.testnet.persistence.one:443 --keyring-backend=test --chain-id test-core-1
+persistenceCore tx bank send persistence1anxjfwgx4tz2dk7uzz6m3gccxfyh5vak5pl4yx persistence1anxjfwgx4tz2dk7uzz6m3gccxfyh5vak5pl4yx 10000ibc/5EB63C96C44E329E2EBEFC269488F1062E8AD88D0F5D168F0411873869924E37 --node https://rpc.testnet.persistence.one:443 --keyring-backend=test
+persistenceCore tx bank send persistence1anxjfwgx4tz2dk7uzz6m3gccxfyh5vak5pl4yx persistence1anxjfwgx4tz2dk7uzz6m3gccxfyh5vak5pl4yx 10000ibc/5EB63C96C44E329E2EBEFC269488F1062E8AD88D0F5D168F0411873869924E37 --node https://rpc.testnet.persistence.one:443
+persistenceCore q bank balances persistence12m6ll675k83skhd2qkkp2fdv77erd7xw7j0udp --node https://rpc.testnet.persistence.one:443
+persistenceCore q bank balances persistence1rcwnsckt8y0dle74k2u5n6tstdeqpexasz9s2w --node https://rpc.testnet.persistence.one:443
+persistenceCore q bank balances persistence19hx4jut2lfkuwvmk4t3h4v4vmzkxlha5euzel8 --node https://rpc.testnet.persistence.one:443
+persistenceCore q bank balances persistence1q754y2gha4zaluhg07yfvzvvvrq9cmfjqckx87 --node https://rpc.testnet.persistence.one:443
+persistenceCore q ibc channels --node https://rpc.testnet.persistence.one:443

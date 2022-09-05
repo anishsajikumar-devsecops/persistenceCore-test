@@ -1,0 +1,20 @@
+{
+  "title": "Change store code permission to whitelisted addresses",
+  "description": "Change store code permission to whitelisted addresses",
+  "changes": [
+    {
+      "subspace": "wasm",
+      "key": "uploadAccess",
+      "value": {
+        "permission": "AnyOfAddresses",
+        "addresses": ["persistence152nvc6f096v6n6tr5lg50xq22ak0chsr0ru7xc", "persistence1eld9dngatavy9nqu9j0d5ratjvp2887zsnqp6x", "persistence1jcxqsatw37pxy9c5rwerwft7pk3amf7fc7g8kv", "persistence1pss7nxeh3f9md2vuxku8q99femnwdjtcpe9ky9"]
+      }
+    },
+    {
+      "subspace": "wasm",
+      "key": "instantiateAccess",
+      "value": "AnyOfAddresses"
+    }
+  ],
+  "deposit": "1000000uxprt"
+}

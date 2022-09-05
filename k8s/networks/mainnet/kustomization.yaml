@@ -1,0 +1,6 @@
+namespace: graph-core-1
+
+resources:
+  # - ingress.yaml
+  - ../../graph-node
+  - configmap.yaml
