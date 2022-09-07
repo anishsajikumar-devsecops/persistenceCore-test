@@ -80,7 +80,9 @@ then
   wasm_permission="Everybody"
 fi
 
+instantiate_permission="OnlyAddress"
+
 jq -r ".app_state.wasm.params.code_upload_access.permission |= \"${wasm_permission}\"" $HOME/$CHAIN_DATA_DIR/config/genesis.json > /tmp/genesis.json; mv /tmp/genesis.json $HOME/$CHAIN_DATA_DIR/config/genesis.json
-jq -r ".app_state.wasm.params.instantiate_default_permission |= \"${wasm_permission}\"" $HOME/$CHAIN_DATA_DIR/config/genesis.json > /tmp/genesis.json; mv /tmp/genesis.json $HOME/$CHAIN_DATA_DIR/config/genesis.json
+jq -r ".app_state.wasm.params.instantiate_default_permission |= \"${instantiate_permission}\"" $HOME/$CHAIN_DATA_DIR/config/genesis.json > /tmp/genesis.json; mv /tmp/genesis.json $HOME/$CHAIN_DATA_DIR/config/genesis.json
 
 $CHAIN_BIN tendermint show-node-id
