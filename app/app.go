@@ -13,6 +13,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"time"
 
 	"github.com/CosmWasm/wasmd/x/wasm"
 	wasmclient "github.com/CosmWasm/wasmd/x/wasm/client"
@@ -825,6 +826,14 @@ func NewApplication(
 			blockParams.Block.MaxGas = 100000000
 			blockParams.Block.MaxBytes = 10485760
 			app.StoreConsensusParams(ctx, blockParams)
+
+			// Debug step to set day epoch to 30 secs for faster testing periods
+			ctx.Logger().Info("Setting epoch module to have updated... epoch info")
+			epochInfo := app.EpochsKeeper.GetEpochInfo(ctx, "day")
+			epochInfo.Duration = time.Second * 30
+			app.EpochsKeeper.DeleteEpochInfo(ctx, "day")
+			ctx.Logger().Info("epoch info:", epochInfo)
+			app.EpochsKeeper.AddEpochInfo(ctx, epochInfo)
 
 			return newVM, nil
 		},
