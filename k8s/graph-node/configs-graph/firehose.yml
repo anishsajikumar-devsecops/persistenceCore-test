@@ -1,19 +1,16 @@
 start:
   args:
-    - ingestor
+    - reader
     - merger
     # - relayer
     - firehose
   flags:
     # Common flags
-    common-first-streamable-block: 1
-    common-blockstream-addr: localhost:9000
+    common-first-streamable-block: 9274000
 
-    # Ingestor specific flags
-    ingestor-mode: node
-    ingestor-node-path: /usr/bin/persistenceCore
-    ingestor-node-args: start --x-crisis-skip-assert-invariants --home /persistencecore
-    ingestor-node-logs-filter: "module=(p2p|pex|consensus|x/bank|x/wasm)"
-    firehose-real-time-tolerance: 99999h
-    relayer-max-source-latency: 99999h
-    ingestor-node-env: "KEY=VALUE,KEY=VALUE"
+    # reader specific flags
+    reader-mode: node
+    reader-node-path: /usr/bin/persistenceCore
+    reader-node-args: start --x-crisis-skip-assert-invariants --home /persistencecore
+    reader-node-logs-filter: "module=(p2p|pex|consensus|x/bank|x/wasm)"
+    reader-node-env: "KEY=VALUE,KEY=VALUE"
