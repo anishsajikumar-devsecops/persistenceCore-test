@@ -1,0 +1,24 @@
+namespace: testnet
+
+resources:
+  - ingress.yaml
+  - ../../graph-node
+  - configmap.yaml
+
+patches:
+- patch: |-
+    - op: replace
+      path: /spec/template/metadata/annotations/genesis_node_data_resolution_method
+      value: STATIC
+    - op: replace
+      path: /spec/template/metadata/annotations/genesis_host
+      value: "3.34.2.126"
+    - op: replace
+      path: /spec/template/metadata/annotations/genesis_exposer_port
+      value: ''
+    - op: replace
+      path: /spec/template/metadata/annotations/genesis_json_fetch_url
+      value: "https://raw.githubusercontent.com/persistenceOne/networks/master/test-core-1/final_genesis.json"
+  target:
+    kind: StatefulSet
+    name: persistencecore-firehose-node

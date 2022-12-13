@@ -46,6 +46,11 @@ spec:
         role: api-gateway
         sla: high
         tier: gateway
+        genesis_node_data_resolution_method: DYNAMIC
+        genesis_host: persistencecore-genesis.dev-core.svc.cluster.local
+        genesis_exposer_port: '8081'
+        genesis_json_fetch_url: ''
+        genesis_port_p2p: '26656'
       labels:
         app.kubernetes.io/instance: persistencecore
         app.kubernetes.io/type: persistencecore-firehose-node
@@ -54,25 +59,36 @@ spec:
     spec:
       initContainers:
         - name: wait-for-genesis
-          image: betterpersist/persistencecore:fh-latest-2
+          image: betterpersist/persistencecore:v5.0.1-fh
           imagePullPolicy: Always
           env:
+            - name: GENESIS_NODE_DATA_RESOLUTION_METHOD
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.annotations['genesis_node_data_resolution_method']
             - name: GENESIS_HOST
-              value: persistencecore-genesis.dev-core
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.annotations['genesis_host']
             - name: GENESIS_PORT
-              value: "8081"
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.annotations['genesis_exposer_port']
           command:
             - bash
             - "-c"
             - |
-              while [ $(curl -sw '%{http_code}' http://$GENESIS_HOST.svc.cluster.local:$GENESIS_PORT/node_id -o /dev/null) -ne 200 ]; do
-                echo "Genesis validator does not seem to be ready. Waiting for it to start..."
-                sleep 10;
-              done
+              # Do the following if the resolution method is dynamic else skip (we assume that in static configuration peer node is already up)
+              if [ "$GENESIS_NODE_DATA_RESOLUTION_METHOD" = "DYNAMIC" ]; then
+                while [ $(curl -sw '%{http_code}' http://$GENESIS_HOST:$GENESIS_PORT/node_id -o /dev/null) -ne 200 ]; do
+                  echo "Genesis validator does not seem to be ready. Waiting for it to start..."
+                  sleep 10;
+                done
+              fi
               echo "Ready to start"
               exit 0
         - name: init-firehose-node
-          image: betterpersist/persistencecore:fh-latest-2
+          image: betterpersist/persistencecore:v5.0.1-fh
           imagePullPolicy: Always
           env:
             - name: CHAIN_ID
@@ -83,9 +99,29 @@ spec:
             - name: HOME_DIR
               value: /persistencecore
             - name: GENESIS_HOST
-              value: persistencecore-genesis.dev-core
-            - name: GENESIS_PORT
-              value: "8081"
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.annotations['genesis_host']
+            # We support 2 types of resolution methods: (dynamic, static), if the resolution method is dynamic then we fetch the node id
+            # on the fly from the exposer app exposed service on the specified port, otherwise it is required that the node id is 
+            # specified exactly as an environment variable
+            - name: GENESIS_NODE_DATA_RESOLUTION_METHOD
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.annotations['genesis_node_data_resolution_method']
+            - name: GENESIS_EXPOSER_PORT
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.annotations['genesis_exposer_port']
+            # This URL is used to fetch the genesis json if the NODE_DATA_RESOLUTION_METHOD is static
+            - name: GENESIS_JSON_FETCH_URL
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.annotations['genesis_json_fetch_url']
+            - name: GENESIS_PORT_P2P
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.annotations['genesis_port_p2p']
           command:
             - bash
             - "-c"
@@ -104,22 +140,44 @@ spec:
               jq -r ".firehose_nodes[$NODE_INDEX].mnemonic" /configs-graph/firehose-node.json | persistenceCore init $NODE_NAME --chain-id $CHAIN_ID --home $HOME_DIR --recover
               jq -r ".firehose_nodes[$NODE_INDEX].mnemonic" /configs-graph/firehose-node.json | persistenceCore keys add $NODE_NAME --recover --keyring-backend="test" --home $HOME_DIR
 
-              curl http://$GENESIS_HOST.svc.cluster.local:$GENESIS_PORT/genesis -o $HOME_DIR/config/genesis.json
+              # if we have GENESIS_NODE_DATA_RESOLUTION_METHOD is dynamic fetch the genesis from the GENESIS_EXPOSED_PORT on the GENESIS_HOST 
+              # else fetch it directly from GENESIS_JSON_FETCH_URL
+              if [ "$GENESIS_NODE_DATA_RESOLUTION_METHOD" = "DYNAMIC" ]; then
+                  echo "Config: DYNAMIC. Fetching genesis file from $GENESIS_HOST:$GENESIS_PORT"
+                  GENESIS_NODE_ID=$(curl -s http://$GENESIS_HOST:$GENESIS_PORT/node_id)
+                  curl http://$GENESIS_HOST:$GENESIS_PORT/genesis -o $HOME_DIR/config/genesis.json
+              else
+                  echo "Config: STATIC. Fetching genesis file from $GENESIS_JSON_FETCH_URL"
+                  curl $GENESIS_JSON_FETCH_URL -o $HOME_DIR/config/genesis.json
+                  GENESIS_NODE_ID=$(persistenceCore status --node tcp://$GENESIS_HOST:26657 2>&1 > /dev/null | jq -r '.NodeInfo.id')
+              fi
+
               echo "Genesis file that we got....."
               cat $HOME_DIR/config/genesis.json
 
-              echo "All exports"
-              export
+              GENESIS_NODE_P2P=$GENESIS_NODE_ID@$GENESIS_HOST:$GENESIS_PORT_P2P
+              echo "Node P2P: $GENESIS_NODE_P2P \n\n"
 
-              echo "Fetching genesis file"
+              echo '\n random-empty-string \n'
 
-              GENESIS_NODE_P2P=$(curl -s http://$GENESIS_HOST.svc.cluster.local:$GENESIS_PORT/node_id)@$GENESIS_HOST.svc.cluster.local:26656
-              echo "Node P2P: $GENESIS_NODE_P2P"
-              sed -i "s/persistent_peers = \"\"/persistent_peers = \"$GENESIS_NODE_P2P\"/g" $HOME_DIR/config/config.toml
+              # sed -i "s/persistent_peers = \"\"/persistent_peers = \"$GENESIS_NODE_P2P\"/g" $HOME_DIR/config/config.toml
               sed -i 's#"tcp://127.0.0.1:26657"#"tcp://0.0.0.0:26657"#g' $HOME_DIR/config/config.toml
               sed -i 's/timeout_commit = "5s"/timeout_commit = "1s"/g' $HOME_DIR/config/config.toml
               sed -i 's/timeout_propose = "3s"/timeout_propose = "1s"/g' $HOME_DIR/config/config.toml
               sed -i 's/index_all_keys = false/index_all_keys = true/g' $HOME_DIR/config/config.toml
+
+              # SNAP_RPC="https://rpc.testnet.persistence.one:443"
+
+              # LATEST_HEIGHT=$(curl -s $SNAP_RPC/block | jq -r .result.block.header.height); \
+              # BLOCK_HEIGHT=$((LATEST_HEIGHT - 20000)); \
+              # TRUST_HASH=$(curl -s "$SNAP_RPC/block?height=$BLOCK_HEIGHT" | jq -r .result.block_id.hash)
+
+              # sed -i.bak -E "s|^(enable[[:space:]]+=[[:space:]]+).*$|\1true| ; \
+              # s|^(rpc_servers[[:space:]]+=[[:space:]]+).*$|\1\"$SNAP_RPC,$SNAP_RPC\"| ; \
+              # s|^(trust_height[[:space:]]+=[[:space:]]+).*$|\1$BLOCK_HEIGHT| ; \
+              # s|^(trust_hash[[:space:]]+=[[:space:]]+).*$|\1\"$TRUST_HASH\"|" $HOME_DIR/config/config.toml
+
+              sed -i 's/seeds = \"\"/seeds = \"aeb1a074c6cbb00e32f9380cbf11c960e9b165ea@13.125.252.209:26656,b4237f8a7ca357d380ad119b76cbceec7e7e8a75@seed.testnet.persistence.one:26656\"/g' $HOME_DIR/config/config.toml
 
               echo "Printing the whole config.toml file"
 
@@ -131,10 +189,8 @@ spec:
               enabled = true
               output_file = "stdout"
               END
-              
-              cat $HOME_DIR/config/config.toml
 
-              curl -s http://$GENESIS_HOST.svc.cluster.local:$GENESIS_PORT/pub_key
+              cat $HOME_DIR/config/config.toml
           resources:
             limits:
               cpu: "0.2"
@@ -145,13 +201,11 @@ spec:
           volumeMounts:
             - mountPath: /persistencecore
               name: persistencecore
-            - mountPath: /configs
-              name: addresses
             - mountPath: /configs-graph
               name: addresses-graph
       containers:
         - name: firehose-node
-          image: betterpersist/persistencecore:fh-latest-2
+          image: betterpersist/persistencecore:v5.0.1-fh-fix
           imagePullPolicy: Always
           env:
             - name: CHAIN_ID
@@ -165,82 +219,34 @@ spec:
             - bash
             - "-c"
             - |
-              echo "Installing firehose cosmos"
-              wget https://github.com/figment-networks/firehose-cosmos/releases/download/v0.5.0/firehose-cosmos_linux_amd64 -O firehose-cosmos
-              chmod +x firehose-cosmos
-              mv firehose-cosmos /usr/local/bin
+              echo "Installing firecosmos"
+              wget https://github.com/figment-networks/firehose-cosmos/releases/download/v0.6.0/firecosmos_linux_amd64 -O firecosmos
+              chmod +x firecosmos
+              mv firecosmos /usr/local/bin
 
               echo "starting firehose with persistence core"
-              # sleep infinity
-              firehose-cosmos start --config /configs-graph/firehose.yml --data-dir /fh-data
-          # lifecycle:
-          #   postStart:
-          #     exec:
-          #       command:
-          #         - bash
-          #         - "-c"
-          #         - |
-          #           NODE_INDEX=${HOSTNAME##*-}
-          #           NODE_NAME=$(jq -r ".firehose_nodes[$NODE_INDEX].name" /configs-graph/firehose-node.json)
-          #           echo "firehose-node Index: $NODE_INDEX, Key name: $NODE_NAME"
-
-          #           # Wait for the node to be synced
-          #           max_tries=10
-          #           while [[ $(persistenceCore status --home $HOME_DIR 2>&1 | jq ".SyncInfo.catching_up") == true ]]
-          #           do
-          #             if [[ max_tries -lt 0 ]]; then echo "Not able to sync with genesis node"; exit 1; fi
-          #             echo "Still syncing... Sleeping for 15 secs. Tries left $max_tries"
-          #             ((max_tries--))
-          #             sleep 30
-          #           done
+              sleep infinity
+              # firecosmos start --config /configs-graph/firehose.yml --data-dir /fh-data
           resources:
             limits:
               cpu: "1"
-              memory: "1G"
+              memory: "2G"
             requests:
-              cpu: "0.5"
-              memory: "500M"
+              cpu: "1"
+              memory: "2G"
           volumeMounts:
             - mountPath: /persistencecore
               name: persistencecore
-            - mountPath: /configs
-              name: addresses
             - mountPath: /configs-graph
               name: addresses-graph
             - mountPath: /fh-data
               name: firehose-pv-storage
-        - name: exposer-app
-          image: persistenceone/exposer:latest
-          imagePullPolicy: Always
-          env:
-            - name: HOME_DIR
-              value: /persistencecore
-            - name: GENESIS_FILE
-              value: /persistencecore/config/genesis.json
-            - name: PORT
-              value: "8081"
-            - name: CLIENT_NAME
-              value: "persistencecore"
-          command: [ "exposer" ]
-          resources:
-            limits:
-              cpu: "0.1"
-              memory: "100M"
-            requests:
-              cpu: "0.1"
-              memory: "100M"
-          volumeMounts:
-            - mountPath: /persistencecore
-              name: persistencecore
       volumes:
         - name: persistencecore
           emptyDir: { }
         - name: firehose-pv-storage
           persistentVolumeClaim:
             claimName: firehose-pv-claim
-        - name: addresses
-          configMap:
-            name: test-addresses-persistencecore
         - name: addresses-graph
           configMap:
             name: test-addresses-persistencecore-graph
