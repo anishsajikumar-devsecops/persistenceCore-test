@@ -51,6 +51,7 @@ spec:
         genesis_exposer_port: '8081'
         genesis_json_fetch_url: ''
         genesis_port_p2p: '26656'
+        state_restore_snapshot_url: ''
       labels:
         app.kubernetes.io/instance: persistencecore
         app.kubernetes.io/type: persistencecore-firehose-node
@@ -59,7 +60,7 @@ spec:
     spec:
       initContainers:
         - name: wait-for-genesis
-          image: betterpersist/persistencecore:v5.0.1-fh
+          image: betterpersist/persistencecore:v5.0.1-fh-fix
           imagePullPolicy: Always
           env:
             - name: GENESIS_NODE_DATA_RESOLUTION_METHOD
@@ -88,7 +89,7 @@ spec:
               echo "Ready to start"
               exit 0
         - name: init-firehose-node
-          image: betterpersist/persistencecore:v5.0.1-fh
+          image: betterpersist/persistencecore:v5.0.1-fh-fix
           imagePullPolicy: Always
           env:
             - name: CHAIN_ID
@@ -122,87 +123,31 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.annotations['genesis_port_p2p']
+            - name: STATE_RESTORE_SNAPSHOT_URL
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.annotations['state_restore_snapshot_url']
           command:
             - bash
             - "-c"
             - |
-              NODE_INDEX=${HOSTNAME##*-}
-              echo "firehose-node Index: $NODE_INDEX"
-
-              rm -rf $HOME_DIR/*
-
-              NODE_NAME=$(jq -r ".firehose_nodes[$NODE_INDEX].name" /configs-graph/firehose-node.json)
-              echo "firehose-node Index: $NODE_INDEX, Key name: $NODE_NAME"
-
-              echo "Printing genesis file before init"
-              ls -lrht $HOME_DIR/config
-
-              jq -r ".firehose_nodes[$NODE_INDEX].mnemonic" /configs-graph/firehose-node.json | persistenceCore init $NODE_NAME --chain-id $CHAIN_ID --home $HOME_DIR --recover
-              jq -r ".firehose_nodes[$NODE_INDEX].mnemonic" /configs-graph/firehose-node.json | persistenceCore keys add $NODE_NAME --recover --keyring-backend="test" --home $HOME_DIR
-
-              # if we have GENESIS_NODE_DATA_RESOLUTION_METHOD is dynamic fetch the genesis from the GENESIS_EXPOSED_PORT on the GENESIS_HOST 
-              # else fetch it directly from GENESIS_JSON_FETCH_URL
-              if [ "$GENESIS_NODE_DATA_RESOLUTION_METHOD" = "DYNAMIC" ]; then
-                  echo "Config: DYNAMIC. Fetching genesis file from $GENESIS_HOST:$GENESIS_PORT"
-                  GENESIS_NODE_ID=$(curl -s http://$GENESIS_HOST:$GENESIS_PORT/node_id)
-                  curl http://$GENESIS_HOST:$GENESIS_PORT/genesis -o $HOME_DIR/config/genesis.json
-              else
-                  echo "Config: STATIC. Fetching genesis file from $GENESIS_JSON_FETCH_URL"
-                  curl $GENESIS_JSON_FETCH_URL -o $HOME_DIR/config/genesis.json
-                  GENESIS_NODE_ID=$(persistenceCore status --node tcp://$GENESIS_HOST:26657 2>&1 > /dev/null | jq -r '.NodeInfo.id')
-              fi
-
-              echo "Genesis file that we got....."
-              cat $HOME_DIR/config/genesis.json
-
-              GENESIS_NODE_P2P=$GENESIS_NODE_ID@$GENESIS_HOST:$GENESIS_PORT_P2P
-              echo "Node P2P: $GENESIS_NODE_P2P \n\n"
-
-              echo '\n random-empty-string \n'
-
-              # sed -i "s/persistent_peers = \"\"/persistent_peers = \"$GENESIS_NODE_P2P\"/g" $HOME_DIR/config/config.toml
-              sed -i 's#"tcp://127.0.0.1:26657"#"tcp://0.0.0.0:26657"#g' $HOME_DIR/config/config.toml
-              sed -i 's/timeout_commit = "5s"/timeout_commit = "1s"/g' $HOME_DIR/config/config.toml
-              sed -i 's/timeout_propose = "3s"/timeout_propose = "1s"/g' $HOME_DIR/config/config.toml
-              sed -i 's/index_all_keys = false/index_all_keys = true/g' $HOME_DIR/config/config.toml
-
-              # SNAP_RPC="https://rpc.testnet.persistence.one:443"
-
-              # LATEST_HEIGHT=$(curl -s $SNAP_RPC/block | jq -r .result.block.header.height); \
-              # BLOCK_HEIGHT=$((LATEST_HEIGHT - 20000)); \
-              # TRUST_HASH=$(curl -s "$SNAP_RPC/block?height=$BLOCK_HEIGHT" | jq -r .result.block_id.hash)
-
-              # sed -i.bak -E "s|^(enable[[:space:]]+=[[:space:]]+).*$|\1true| ; \
-              # s|^(rpc_servers[[:space:]]+=[[:space:]]+).*$|\1\"$SNAP_RPC,$SNAP_RPC\"| ; \
-              # s|^(trust_height[[:space:]]+=[[:space:]]+).*$|\1$BLOCK_HEIGHT| ; \
-              # s|^(trust_hash[[:space:]]+=[[:space:]]+).*$|\1\"$TRUST_HASH\"|" $HOME_DIR/config/config.toml
-
-              sed -i 's/seeds = \"\"/seeds = \"aeb1a074c6cbb00e32f9380cbf11c960e9b165ea@13.125.252.209:26656,b4237f8a7ca357d380ad119b76cbceec7e7e8a75@seed.testnet.persistence.one:26656\"/g' $HOME_DIR/config/config.toml
-
-              echo "Printing the whole config.toml file"
-
-              cat << END >> $HOME_DIR/config/config.toml
-              #######################################################
-              ###       Extractor Configuration Options     ###
-              #######################################################
-              [extractor]
-              enabled = true
-              output_file = "stdout"
-              END
-
-              cat $HOME_DIR/config/config.toml
+              ls -lah /
+              ls -lah /scripts/
+              bash /scripts/init-firehose-node.sh
           resources:
             limits:
-              cpu: "0.2"
-              memory: "200M"
+              cpu: "1"
+              memory: "1G"
             requests:
-              cpu: "0.1"
-              memory: "200M"
+              cpu: "1"
+              memory: "1G"
           volumeMounts:
             - mountPath: /persistencecore
-              name: persistencecore
-            - mountPath: /configs-graph
-              name: addresses-graph
+              name: node-pv-storage
+            - mountPath: /config-graph
+              name: config-graph
+            - mountPath: /scripts
+              name: scripts
       containers:
         - name: firehose-node
           image: betterpersist/persistencecore:v5.0.1-fh-fix
@@ -226,28 +171,37 @@ spec:
 
               echo "starting firehose with persistence core"
               sleep infinity
-              # firecosmos start --config /configs-graph/firehose.yml --data-dir /fh-data
+              # firecosmos start --config $HOME_DIR/config/firehose.yml --data-dir /fh-data
           resources:
             limits:
-              cpu: "1"
-              memory: "2G"
+              cpu: "2"
+              memory: "4G"
             requests:
               cpu: "1"
-              memory: "2G"
+              memory: "3G"
           volumeMounts:
             - mountPath: /persistencecore
-              name: persistencecore
-            - mountPath: /configs-graph
-              name: addresses-graph
+              name: node-pv-storage
+            - mountPath: /config-graph
+              name: config-graph
             - mountPath: /fh-data
               name: firehose-pv-storage
       volumes:
-        - name: persistencecore
-          emptyDir: { }
         - name: firehose-pv-storage
           persistentVolumeClaim:
             claimName: firehose-pv-claim
-        - name: addresses-graph
+        - name: config-graph
           configMap:
-            name: test-addresses-persistencecore-graph
----
+            name: config-graph
+        - name: scripts
+          configMap:
+            name: scripts
+  volumeClaimTemplates:
+  - metadata:
+      name: node-pv-storage
+    spec:
+      storageClassName: do-block-storage
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 30Gi
