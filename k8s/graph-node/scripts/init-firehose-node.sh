@@ -48,7 +48,10 @@ else
     s|^(trust_height[[:space:]]+=[[:space:]]+).*$|\1$BLOCK_HEIGHT| ; \
     s|^(trust_hash[[:space:]]+=[[:space:]]+).*$|\1\"$TRUST_HASH\"|" $HOME_DIR/config/config.toml
 
-    sed -i 's/seeds = \"\"/seeds = \"b4237f8a7ca357d380ad119b76cbceec7e7e8a75@128.199.218.4:26656\"/g' $HOME_DIR/config/config.toml
+    # replace seeds if the variable is not empty
+    if [ ! -z "$SEEDS" ]; then
+        sed -i "s/seeds = \"\"/seeds = \"$SEEDS\"/g" $HOME_DIR/config/config.toml
+    fi
 
     echo "Printing the whole config.toml file"
 
