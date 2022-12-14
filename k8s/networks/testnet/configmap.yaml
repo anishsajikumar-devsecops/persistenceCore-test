@@ -4,3 +4,28 @@ metadata:
   name: persistencecore
 data:
   chain.id: test-core-1
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: firehose-node-config
+data:
+  sync_node.resolution_method: STATIC
+  sync_node.host: '3.34.2.126'
+  sync_node.exposer_port: ''
+  sync_node.port_p2p: '26656'
+  sync_node.genesis_json_fetch_url: 'https://raw.githubusercontent.com/persistenceOne/networks/master/test-core-1/final_genesis.json'
+  snapshot_restore_url: 'https://tendermint-snapshots.s3.ap-southeast-1.amazonaws.com/persistence/testnet/test.tar.gz'
+  seeds: 'b4237f8a7ca357d380ad119b76cbceec7e7e8a75@128.199.218.4:26656'
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: graph-node-config
+data:
+  firehose_node.host: 'firehose-node.testnet.svc.cluster.local'
+  firehose_node.port: '9030'
+  ipfs.host: 'ipfs.testnet.svc.cluster.local'
+  ipfs.port: '5001'

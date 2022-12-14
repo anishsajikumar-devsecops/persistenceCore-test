@@ -2,8 +2,8 @@ start:
   args:
     - reader
     - merger
+    - relayer
     - firehose
-    # - relayer
   flags:
     # Common flags
     common-first-streamable-block: 9292200

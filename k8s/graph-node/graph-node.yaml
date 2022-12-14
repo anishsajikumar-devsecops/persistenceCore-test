@@ -42,15 +42,15 @@ spec:
         role: api-gateway
         sla: high
         tier: gateway
-        firehose_host: '9030'
-        firehose_port: 'firehose.dev-core'
-        ipfs_host: 'ipfs.dev-core'
-        ipfs_port: '5001'
+        firehose_host: "9030"
+        firehose_port: "firehose.dev-core"
+        ipfs_host: "ipfs.dev-core"
+        ipfs_port: "5001"
       labels:
         app.kubernetes.io/instance: persistencecore
         app.kubernetes.io/type: persistencecore-graph-node
         app.kubernetes.io/name: persistencecore-graph-node
-        app.kubernetes.io/version: '0.1'
+        app.kubernetes.io/version: "0.1"
     spec:
       initContainers:
         - name: wait-for-firehose-node
@@ -59,12 +59,14 @@ spec:
           env:
             - name: FIREHOSE_HOST
               valueFrom:
-                fieldRef:
-                  fieldPath: metadata.annotations['firehose_host']
+                configMapKeyRef:
+                  name: graph-node-config
+                  key: firehose_node.host
             - name: FIREHOSE_PORT
               valueFrom:
-                fieldRef:
-                  fieldPath: metadata.annotations['firehose_port']
+                configMapKeyRef:
+                  name: graph-node-config
+                  key: firehose_node.port
           command:
             - sh
             - "-c"
@@ -74,7 +76,7 @@ spec:
 
               x=1; while [ $x -le 10 ]; do
                 echo "Attempt number: $x"
-                FIREHOSE_STATUS=$(./grpcurl -plaintext $FIREHOSE_HOST.svc.cluster.local:$FIREHOSE_PORT grpc.health.v1.Health.Check | jq .status)
+                FIREHOSE_STATUS=$(./grpcurl -plaintext $FIREHOSE_HOST:$FIREHOSE_PORT grpc.health.v1.Health.Check | jq .status)
                 if [ $FIREHOSE_STATUS == '"SERVING"' ]
                 then
                   echo "Ready to start"
@@ -84,8 +86,8 @@ spec:
                 sleep 15
                 x=$(( $x + 1 ))
               done
-              
-              echo "Retry limit exceeded. Current status: $(./grpcurl -plaintext $FIREHOSE_HOST.svc.cluster.local:$FIREHOSE_PORT grpc.health.v1.Health.Check | jq .status)"
+
+              echo "Retry limit exceeded. Current status: $(./grpcurl -plaintext $FIREHOSE_HOST:$FIREHOSE_PORT grpc.health.v1.Health.Check | jq .status)"
               exit 1
 
       containers:
@@ -95,35 +97,39 @@ spec:
           env:
             - name: FIREHOSE_HOST
               valueFrom:
-                fieldRef:
-                  fieldPath: metadata.annotations['firehose_host']
+                configMapKeyRef:
+                  name: graph-node-config
+                  key: firehose_node.host
             - name: FIREHOSE_PORT
               valueFrom:
-                fieldRef:
-                  fieldPath: metadata.annotations['firehose_port']
+                configMapKeyRef:
+                  name: graph-node-config
+                  key: firehose_node.port
             - name: IPFS_HOST
               valueFrom:
-                fieldRef:
-                  fieldPath: metadata.annotations['ipfs_host']
+                configMapKeyRef:
+                  name: graph-node-config
+                  key: ipfs.host
             - name: IPFS_PORT
               valueFrom:
-                fieldRef:
-                  fieldPath: metadata.annotations['ipfs_port']
+                configMapKeyRef:
+                  name: graph-node-config
+                  key: ipfs.port
             - name: POSTGRES_HOST
               valueFrom:
                 secretKeyRef:
-                    name: postgres-secret
-                    key: POSTGRES_HOST
+                  name: postgres-secret
+                  key: POSTGRES_HOST
             - name: POSTGRES_PORT
               valueFrom:
                 secretKeyRef:
-                    name: postgres-secret
-                    key: POSTGRES_PORT
+                  name: postgres-secret
+                  key: POSTGRES_PORT
             - name: POSTGRES_USER
               valueFrom:
                 secretKeyRef:
-                    name: postgres-secret
-                    key: POSTGRES_USER
+                  name: postgres-secret
+                  key: POSTGRES_USER
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -147,7 +153,7 @@ spec:
               sed -i "s/POSTGRES_DB/$POSTGRES_DB/g" config.toml
               sed -i "s/FIREHOSE_HOST/$FIREHOSE_HOST.svc.cluster.local/g" config.toml
               sed -i "s/FIREHOSE_PORT/$FIREHOSE_PORT/g" config.toml
-              
+
               # Print config before starting node
               cat config.toml
 
@@ -160,11 +166,11 @@ spec:
                 --node-id index_node_cosmos_1
           resources:
             limits:
-              cpu: "0.5"
-              memory: "500M"
+              cpu: "2"
+              memory: "4G"
             requests:
-              cpu: "0.25"
-              memory: "250M"
+              cpu: "1"
+              memory: "2G"
           volumeMounts:
             - mountPath: config-graph
               name: config-graph
@@ -173,3 +179,4 @@ spec:
           configMap:
             name: config-graph
 ---
+

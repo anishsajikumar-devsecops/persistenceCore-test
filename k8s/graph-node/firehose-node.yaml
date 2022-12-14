@@ -46,12 +46,6 @@ spec:
         role: api-gateway
         sla: high
         tier: gateway
-        genesis_node_data_resolution_method: DYNAMIC
-        genesis_host: persistencecore-genesis.dev-core.svc.cluster.local
-        genesis_exposer_port: '8081'
-        genesis_json_fetch_url: ''
-        genesis_port_p2p: '26656'
-        state_restore_snapshot_url: ''
       labels:
         app.kubernetes.io/instance: persistencecore
         app.kubernetes.io/type: persistencecore-firehose-node
@@ -101,32 +95,43 @@ spec:
               value: /persistencecore
             - name: GENESIS_HOST
               valueFrom:
-                fieldRef:
-                  fieldPath: metadata.annotations['genesis_host']
+                configMapKeyRef:
+                  key: sync_node.host
+                  name: firehose-node-config
             # We support 2 types of resolution methods: (dynamic, static), if the resolution method is dynamic then we fetch the node id
             # on the fly from the exposer app exposed service on the specified port, otherwise it is required that the node id is 
             # specified exactly as an environment variable
             - name: GENESIS_NODE_DATA_RESOLUTION_METHOD
               valueFrom:
-                fieldRef:
-                  fieldPath: metadata.annotations['genesis_node_data_resolution_method']
+                configMapKeyRef:
+                  key: sync_node.resolution_method
+                  name: firehose-node-config
             - name: GENESIS_EXPOSER_PORT
               valueFrom:
-                fieldRef:
-                  fieldPath: metadata.annotations['genesis_exposer_port']
+                configMapKeyRef:
+                  key: sync_node.exposer_port
+                  name: firehose-node-config
             # This URL is used to fetch the genesis json if the NODE_DATA_RESOLUTION_METHOD is static
             - name: GENESIS_JSON_FETCH_URL
               valueFrom:
-                fieldRef:
-                  fieldPath: metadata.annotations['genesis_json_fetch_url']
+                configMapKeyRef:
+                  key: sync_node.genesis_json_fetch_url
+                  name: firehose-node-config
             - name: GENESIS_PORT_P2P
               valueFrom:
-                fieldRef:
-                  fieldPath: metadata.annotations['genesis_port_p2p']
+                configMapKeyRef:
+                  key: sync_node.port_p2p
+                  name: firehose-node-config
             - name: STATE_RESTORE_SNAPSHOT_URL
               valueFrom:
-                fieldRef:
-                  fieldPath: metadata.annotations['state_restore_snapshot_url']
+                configMapKeyRef:
+                  key: snapshot_restore_url
+                  name: firehose-node-config
+            - name: SEEDS
+              valueFrom:
+                configMapKeyRef:
+                  key: seeds
+                  name: firehose-node-config
           command:
             - bash
             - "-c"
@@ -170,8 +175,7 @@ spec:
               mv firecosmos /usr/local/bin
 
               echo "starting firehose with persistence core"
-              sleep infinity
-              # firecosmos start --config $HOME_DIR/config/firehose.yml --data-dir /fh-data
+              firecosmos start --config $HOME_DIR/config/firehose.yml --data-dir /fh-data
           resources:
             limits:
               cpu: "2"
