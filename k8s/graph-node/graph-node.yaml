@@ -42,6 +42,10 @@ spec:
         role: api-gateway
         sla: high
         tier: gateway
+        firehose_host: '9030'
+        firehose_port: 'firehose.dev-core'
+        ipfs_host: 'ipfs.dev-core'
+        ipfs_port: '5001'
       labels:
         app.kubernetes.io/instance: persistencecore
         app.kubernetes.io/type: persistencecore-graph-node
@@ -54,9 +58,13 @@ spec:
           imagePullPolicy: Always
           env:
             - name: FIREHOSE_HOST
-              value: persistencecore-firehose-node.dev-core
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.annotations['firehose_host']
             - name: FIREHOSE_PORT
-              value: "9030"
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.annotations['firehose_port']
           command:
             - sh
             - "-c"
@@ -86,13 +94,21 @@ spec:
           imagePullPolicy: Always
           env:
             - name: FIREHOSE_HOST
-              value: persistencecore-firehose-node.dev-core
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.annotations['firehose_host']
             - name: FIREHOSE_PORT
-              value: "9030"
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.annotations['firehose_port']
             - name: IPFS_HOST
-              value: ipfs-node.dev-core
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.annotations['ipfs_host']
             - name: IPFS_PORT
-              value: "5001"
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.annotations['ipfs_port']
             - name: POSTGRES_HOST
               valueFrom:
                 secretKeyRef:
@@ -123,7 +139,7 @@ spec:
             - "-c"
             - |
 
-              cp configs-graph/config-graph-node.toml config.toml
+              cp config-graph/config-graph-node.toml config.toml
               sed -i "s/POSTGRES_USER/$POSTGRES_USER/g" config.toml
               sed -i "s/POSTGRES_PASSWORD/$POSTGRES_PASSWORD/g" config.toml
               sed -i "s/POSTGRES_HOST/$POSTGRES_HOST/g" config.toml
@@ -150,19 +166,10 @@ spec:
               cpu: "0.25"
               memory: "250M"
           volumeMounts:
-            - mountPath: /persistencecore
-              name: persistencecore
-            - mountPath: /configs
-              name: addresses
-            - mountPath: /configs-graph
-              name: addresses-graph
+            - mountPath: config-graph
+              name: config-graph
       volumes:
-        - name: persistencecore
-          emptyDir: { }
-        - name: addresses
+        - name: config-graph
           configMap:
-            name: test-addresses-persistencecore
-        - name: addresses-graph
-          configMap:
-            name: test-addresses-persistencecore-graph
+            name: config-graph
 ---
