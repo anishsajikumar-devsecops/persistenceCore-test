@@ -42,10 +42,6 @@ spec:
         role: api-gateway
         sla: high
         tier: gateway
-        firehose_host: "9030"
-        firehose_port: "firehose.dev-core"
-        ipfs_host: "ipfs.dev-core"
-        ipfs_port: "5001"
       labels:
         app.kubernetes.io/instance: persistencecore
         app.kubernetes.io/type: persistencecore-graph-node
@@ -151,7 +147,7 @@ spec:
               sed -i "s/POSTGRES_HOST/$POSTGRES_HOST/g" config.toml
               sed -i "s/POSTGRES_PORT/$POSTGRES_PORT/g" config.toml
               sed -i "s/POSTGRES_DB/$POSTGRES_DB/g" config.toml
-              sed -i "s/FIREHOSE_HOST/$FIREHOSE_HOST.svc.cluster.local/g" config.toml
+              sed -i "s/FIREHOSE_HOST/$FIREHOSE_HOST/g" config.toml
               sed -i "s/FIREHOSE_PORT/$FIREHOSE_PORT/g" config.toml
 
               # Print config before starting node
@@ -162,7 +158,7 @@ spec:
 
               # Start graph node
               graph-node --config config.toml \
-                --ipfs "$IPFS_HOST.svc.cluster.local:$IPFS_PORT" \
+                --ipfs "$IPFS_HOST:$IPFS_PORT" \
                 --node-id index_node_cosmos_1
           resources:
             limits:

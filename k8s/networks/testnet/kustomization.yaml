@@ -1,6 +1,6 @@
 namespace: testnet
 
 resources:
-  # - ingress.yaml
+  - ingress.yaml
   - ../../graph-node
   - configmap.yaml
