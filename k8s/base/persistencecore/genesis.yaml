@@ -58,7 +58,7 @@ spec:
     spec:
       initContainers:
         - name: init-genesis
-          image: persistenceone/persistencecore:latest
+          image: betterpersist/persistencecore:v5.0.1
           imagePullPolicy: Always
           env:
             - name: COINS
@@ -152,7 +152,7 @@ spec:
               name: addresses
       containers:
         - name: validator
-          image: persistenceone/persistencecore:latest
+          image: betterpersist/persistencecore:v5.0.1
           imagePullPolicy: Always
           env:
             - name: CHAIN_ID
@@ -169,11 +169,11 @@ spec:
               persistenceCore start --home $HOME_DIR
           resources:
             limits:
-              cpu: "1"
-              memory: "1G"
+              cpu: "2"
+              memory: "4G"
             requests:
-              cpu: "0.5"
-              memory: "500M"
+              cpu: "1"
+              memory: "2G"
           volumeMounts:
             - mountPath: /persistencecore
               name: genesis-pv-storage
