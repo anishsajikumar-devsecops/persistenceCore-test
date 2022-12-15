@@ -25,7 +25,7 @@ kind: ConfigMap
 metadata:
   name: graph-node-config
 data:
-  firehose_node.host: 'firehose-node.testnet.svc.cluster.local'
+  firehose_node.host: 'persistencecore-firehose-node.testnet.svc.cluster.local'
   firehose_node.port: '9030'
-  ipfs.host: 'ipfs.testnet.svc.cluster.local'
+  ipfs.host: 'ipfs-node.testnet.svc.cluster.local'
   ipfs.port: '5001'
