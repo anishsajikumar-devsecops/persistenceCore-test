@@ -50,25 +50,25 @@ spec:
     spec:
       initContainers:
         - name: wait-for-genesis
-          image: persistenceone/persistencecore:latest
+          image: betterpersist/persistencecore:v5.0.1
           imagePullPolicy: Always
           env:
             - name: GENESIS_HOST
-              value: persistencecore-genesis.dev-core
+              value: persistencecore-genesis.dev-core.svc.cluster.local
             - name: GENESIS_PORT
               value: "8081"
           command:
             - bash
             - "-c"
             - |
-              while [ $(curl -sw '%{http_code}' http://$GENESIS_HOST.svc.cluster.local:$GENESIS_PORT/node_id -o /dev/null) -ne 200 ]; do
+              while [ $(curl -sw '%{http_code}' http://$GENESIS_HOST:$GENESIS_PORT/node_id -o /dev/null) -ne 200 ]; do
                 echo "Genesis validator does not seem to be ready. Waiting for it to start..."
                 sleep 10;
               done
               echo "Ready to start"
               exit 0
         - name: init-validator
-          image: persistenceone/persistencecore:latest
+          image: betterpersist/persistencecore:v5.0.1
           imagePullPolicy: Always
           env:
             - name: CHAIN_ID
@@ -79,7 +79,7 @@ spec:
             - name: HOME_DIR
               value: /persistencecore
             - name: GENESIS_HOST
-              value: persistencecore-genesis.dev-core
+              value: persistencecore-genesis.dev-core.svc.cluster.local
             - name: GENESIS_PORT
               value: "8081"
           command:
@@ -88,8 +88,6 @@ spec:
             - |
               VAL_INDEX=${HOSTNAME##*-}
               echo "Validator Index: $VAL_INDEX"
-
-              # rm -rf $HOME_DIR
 
               VAL_NAME=$(jq -r ".validators[$VAL_INDEX].name" /configs/validators.json)
               echo "Validator Index: $VAL_INDEX, Key name: $VAL_NAME"
@@ -100,7 +98,7 @@ spec:
               jq -r ".validators[$VAL_INDEX].mnemonic" /configs/validators.json | persistenceCore init $VAL_NAME --chain-id $CHAIN_ID --home $HOME_DIR --recover
               jq -r ".validators[$VAL_INDEX].mnemonic" /configs/validators.json | persistenceCore keys add $VAL_NAME --recover --keyring-backend="test" --home $HOME_DIR
 
-              curl http://$GENESIS_HOST.svc.cluster.local:$GENESIS_PORT/genesis -o $HOME_DIR/config/genesis.json
+              curl http://$GENESIS_HOST:$GENESIS_PORT/genesis -o $HOME_DIR/config/genesis.json
               echo "Genesis file that we got....."
               cat $HOME_DIR/config/genesis.json
 
@@ -109,7 +107,7 @@ spec:
 
               echo "Fetching genesis file"
 
-              GENESIS_NODE_P2P=$(curl -s http://$GENESIS_HOST.svc.cluster.local:$GENESIS_PORT/node_id)@$GENESIS_HOST.svc.cluster.local:26656
+              GENESIS_NODE_P2P=$(curl -s http://$GENESIS_HOST:$GENESIS_PORT/node_id)@$GENESIS_HOST:26656
               echo "Node P2P: $GENESIS_NODE_P2P"
               sed -i "s/persistent_peers = \"\"/persistent_peers = \"$GENESIS_NODE_P2P\"/g" $HOME_DIR/config/config.toml
               sed -i 's#"tcp://127.0.0.1:26657"#"tcp://0.0.0.0:26657"#g' $HOME_DIR/config/config.toml
@@ -120,7 +118,7 @@ spec:
               echo "Printing the whole config.toml file"
               cat $HOME_DIR/config/config.toml
 
-              curl -s http://$GENESIS_HOST.svc.cluster.local:$GENESIS_PORT/pub_key
+              curl -s http://$GENESIS_HOST:$GENESIS_PORT/pub_key
           resources:
             limits:
               cpu: "0.2"
@@ -133,38 +131,6 @@ spec:
               name: validator-pv-storage
             - mountPath: /configs
               name: addresses
-        # - name: sync-validator-to-network
-        #   image: persistenceone/persistencecore:latest
-        #   imagePullPolicy: Always
-        #   env:
-        #     - name: CHAIN_ID
-        #       valueFrom:
-        #         configMapKeyRef:
-        #           key: chain.id
-        #           name: persistencecore
-        #     - name: HOME_DIR
-        #       value: /persistencecore
-        #     - name: GENESIS_HOST
-        #       value: persistencecore-genesis.dev-core
-        #     - name: GENESIS_PORT
-        #       value: "8081"
-        #   command:
-        #     - bash
-        #     - "-c"
-        #     - |
-        #       persistenceCore start --home $HOME_DIR
-        #   resources:
-        #     limits:
-        #       cpu: "0.2"
-        #       memory: "200M"
-        #     requests:
-        #       cpu: "0.1"
-        #       memory: "200M"
-        #   volumeMounts:
-        #     - mountPath: /persistencecore
-        #       name: persistencecore
-        #     - mountPath: /configs
-        #       name: addresses
       containers:
         - name: validator
           image: persistenceone/persistencecore
