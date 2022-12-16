@@ -59,16 +59,19 @@ spec:
           env:
             - name: GENESIS_NODE_DATA_RESOLUTION_METHOD
               valueFrom:
-                fieldRef:
-                  fieldPath: metadata.annotations['genesis_node_data_resolution_method']
+                configMapKeyRef:
+                  key: sync_node.resolution_method
+                  name: firehose-node-config
             - name: GENESIS_HOST
               valueFrom:
-                fieldRef:
-                  fieldPath: metadata.annotations['genesis_host']
+                configMapKeyRef:
+                  key: sync_node.host
+                  name: firehose-node-config
             - name: GENESIS_PORT
               valueFrom:
-                fieldRef:
-                  fieldPath: metadata.annotations['genesis_exposer_port']
+                configMapKeyRef:
+                  key: sync_node.exposer_port
+                  name: firehose-node-config
           command:
             - bash
             - "-c"
@@ -132,12 +135,20 @@ spec:
                 configMapKeyRef:
                   key: seeds
                   name: firehose-node-config
+            - name: FIRST_STREAMBLE_BLOCK
+              valueFrom:
+                configMapKeyRef:
+                  key: first_streamable_block
+                  name: firehose-node-config
+            - name: FORCE_INIT
+              valueFrom:
+                configMapKeyRef:
+                  key: force_init
+                  name: firehose-node-config
           command:
             - bash
             - "-c"
             - |
-              ls -lah /
-              ls -lah /scripts/
               bash /scripts/init-firehose-node.sh
           resources:
             limits:
@@ -152,7 +163,7 @@ spec:
             - mountPath: /config-graph
               name: config-graph
             - mountPath: /scripts
-              name: scripts
+              name: scripts-graph
       containers:
         - name: firehose-node
           image: betterpersist/persistencecore:v5.0.1-fh-fix
@@ -175,6 +186,7 @@ spec:
               mv firecosmos /usr/local/bin
 
               echo "starting firehose with persistence core"
+              # sleep infinity
               firecosmos start --config $HOME_DIR/config/firehose.yml --data-dir /fh-data
           resources:
             limits:
@@ -197,9 +209,9 @@ spec:
         - name: config-graph
           configMap:
             name: config-graph
-        - name: scripts
+        - name: scripts-graph
           configMap:
-            name: scripts
+            name: scripts-graph
   volumeClaimTemplates:
   - metadata:
       name: node-pv-storage
