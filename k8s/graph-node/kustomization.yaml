@@ -16,6 +16,6 @@ configMapGenerator:
       - config-graph/firehose.yml
       - config-graph/config.toml
       - config-graph/config-graph-node.toml
-  - name: scripts
+  - name: scripts-graph
     files:
       - scripts/init-firehose-node.sh
