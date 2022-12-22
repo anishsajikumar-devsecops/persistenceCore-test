@@ -3,7 +3,7 @@
     <module name="persistenceCore" />
     <working_directory value="$PROJECT_DIR$" />
     <go_parameters value="-i" />
-    <parameters value="start" />
+    <parameters value="start --home $PROJECT_DIR$/bin/v6-test-data-rc3" />
     <kind value="FILE" />
     <package value="github.com/persistenceOne/persistenceCore" />
     <directory value="$PROJECT_DIR$/" />

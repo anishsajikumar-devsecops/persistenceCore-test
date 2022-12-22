@@ -163,6 +163,7 @@ func RevertCosTombstoning(
 	stakingKeeper *stakingkeeper.Keeper,
 ) error {
 	existingVals := getExistingVals(ctx, stakingKeeper)
+	tombstoneVal(ctx, slashingKeeper, existingVals)
 
 	// Run code on mainnet and testnet for minting lost tokens
 	// check the blockheight is more than tombstoning height
