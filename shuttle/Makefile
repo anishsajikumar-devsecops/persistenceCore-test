@@ -3,7 +3,7 @@ FILE = config.yaml
 HELM_REPO = shuttle
 HELM_CHART = devnet
 HELM_NAME = persistence
-HELM_VERSION = 0.1.11
+HELM_VERSION = 0.1.13
 
 ###############################################################################
 ###                              Helm commands                              ###

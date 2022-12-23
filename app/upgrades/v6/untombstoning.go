@@ -126,7 +126,7 @@ func mintLostTokens(
 	return nil
 }
 
-func revertTombstone(ctx sdk.Context, slashingKeeper *slashingkeeper.Keeper, validator Validator) error {
+func revertTombstone(ctx sdk.Context, slashingKeeper slashingkeeper.Keeper, validator Validator) error {
 	cosValAddress, err := sdk.ValAddressFromBech32(validator.valAddress)
 	if err != nil {
 		return fmt.Errorf("validator address is not valid bech32: %s", cosValAddress)
@@ -180,7 +180,7 @@ func RevertCosTombstoning(
 			}
 			// set mainnet mints to actual addresses
 			for i := range cosMints {
-				cosMints[i].Delegatee = existingVals[0].valAddress
+				cosMints[i].Delegatee = existingVals[0].conAddress
 			}
 			Mints = append(Mints, cosMints...)
 			vals = append(vals, mainnetVals...)
@@ -200,11 +200,17 @@ func RevertCosTombstoning(
 		ctx.Logger().Info(fmt.Sprintf("debug: replacing with: %v", vals))
 
 		for _, value := range vals {
-			revertTombstone(ctx, slashingKeeper, value)
+			err := revertTombstone(ctx, *slashingKeeper, value)
+			if err != nil {
+				panic(err)
+			}
 		}
 
 		for _, mint := range Mints {
-			mintLostTokens(ctx, bankKeeper, stakingKeeper, mintKeeper, mint)
+			err := mintLostTokens(ctx, bankKeeper, stakingKeeper, mintKeeper, mint)
+			if err != nil {
+				panic(err)
+			}
 		}
 	}
 	return nil
