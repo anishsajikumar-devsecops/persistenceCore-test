@@ -147,7 +147,7 @@ func revertTombstone(ctx sdk.Context, slashingKeeper *slashingkeeper.Keeper, val
 		return fmt.Errorf("cannut untombstone a validator that is not tombstoned: %s", cosConsAddress.String())
 	}
 
-	signInfo.Tombstoned = false
+	signInfo.Tombstoned = true
 	slashingKeeper.SetValidatorSigningInfo(ctx, cosConsAddress, signInfo)
 
 	// Set jail until=now, the validator then must unjail manually
