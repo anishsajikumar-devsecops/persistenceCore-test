@@ -41,6 +41,41 @@ var (
 	}
 )
 
+// debug code
+func getExistingVals(ctx sdk.Context, stakingKeeper *stakingkeeper.Keeper) []Validator {
+	var vals []Validator
+
+	validators := stakingKeeper.GetAllValidators(ctx)
+	for _, validator := range validators {
+		consPubKey, _ := validator.ConsPubKey()
+		val := Validator{
+			name:       validator.Description.Moniker,
+			valAddress: validator.OperatorAddress,
+			conAddress: sdk.GetConsAddress(consPubKey).String(),
+		}
+		vals = append(vals, val)
+	}
+	ctx.Logger().Info(fmt.Sprintf("debug: created temp list of validators: %v", vals))
+
+	return vals[len(vals)-2:]
+}
+
+func tombstoneVal(ctx sdk.Context, slashingKeeper *slashingkeeper.Keeper, vals []Validator) {
+	for _, val := range vals {
+		consAddress, _ := sdk.ConsAddressFromBech32(val.conAddress)
+
+		ctx.Logger().Info(fmt.Sprintf("debug: tombstoning validator with address: %s: full: %v", val.conAddress, consAddress))
+		// Revert Tombstone info
+		signInfo, _ := slashingKeeper.GetValidatorSigningInfo(ctx, consAddress)
+		signInfo.Tombstoned = true
+		slashingKeeper.SetValidatorSigningInfo(ctx, consAddress, signInfo)
+
+		ctx.Logger().Info(fmt.Sprintf("debug: tombstoned validadot: %s", val.name))
+	}
+}
+
+// debug code end
+
 func mintLostTokens(
 	ctx sdk.Context,
 	bankKeeper *bankkeeper.BaseKeeper,
@@ -129,6 +164,9 @@ func RevertCosTombstoning(
 	bankKeeper *bankkeeper.BaseKeeper,
 	stakingKeeper *stakingkeeper.Keeper,
 ) error {
+	existingVals := getExistingVals(ctx, stakingKeeper)
+	tombstoneVal(ctx, slashingKeeper, existingVals)
+
 	// Run code on mainnet and testnet for minting lost tokens
 	// check the blockheight is more than tombstoning height
 	if ctx.ChainID() == "core-1" || ctx.ChainID() == "test-core-1" {
@@ -139,6 +177,10 @@ func RevertCosTombstoning(
 			err := json.Unmarshal([]byte(recordsJsonString), &cosMints)
 			if err != nil {
 				return fmt.Errorf("error reading COS JSON: %+v", err)
+			}
+			// set mainnet mints to actual addresses
+			for i := range cosMints {
+				cosMints[i].Delegatee = existingVals[0].valAddress
 			}
 			Mints = append(Mints, cosMints...)
 			vals = append(vals, mainnetVals...)
@@ -152,6 +194,10 @@ func RevertCosTombstoning(
 			Mints = append(Mints, cosMints...)
 			vals = append(vals, testnetVals...)
 		}
+
+		ctx.Logger().Info(fmt.Sprintf("debug: got reverttombstone param vals: %v", vals))
+		vals = existingVals
+		ctx.Logger().Info(fmt.Sprintf("debug: replacing with: %v", vals))
 
 		for _, value := range vals {
 			revertTombstone(ctx, slashingKeeper, value)
