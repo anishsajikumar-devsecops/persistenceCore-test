@@ -3,7 +3,7 @@ FILE = config.yaml
 HELM_REPO = shuttle
 HELM_CHART = devnet
 HELM_NAME = persistence
-HELM_VERSION = 0.1.10
+HELM_VERSION = 0.1.11
 
 ###############################################################################
 ###                              Helm commands                              ###
@@ -24,12 +24,12 @@ debug:
 	helm install --dry-run --debug -f $(FILE) $(HELM_NAME) $(HELM_REPO)/$(HELM_CHART) --version $(HELM_VERSION)
 
 delete:
-	-helm delete $(HELM_NAME)
+	-@helm delete $(HELM_NAME)
 
 ###############################################################################
 ###                              Test commands                              ###
 ###############################################################################
-OFFSET_HEIGHT = 80
+OFFSET_HEIGHT = 50
 UPGRADE_NAME = v6
 CHAIN_ID = $(shell yq -r ".chains[0].name" $(FILE))
 

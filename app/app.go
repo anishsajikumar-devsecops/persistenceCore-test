@@ -845,7 +845,7 @@ func NewApplication(
 				panic(fmt.Sprintf("failed to revert tombstoning: %s", err))
 			}
 
-			err = upgrades.MintPstakeTokens(ctx, app.LSCosmosKeeper)
+			//err = upgrades.MintPstakeTokens(ctx, app.LSCosmosKeeper)
 			//if err != nil {
 			//	panic(fmt.Sprintf("failed to mint pstake tokens: %s", err))
 			//}
