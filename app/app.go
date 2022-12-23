@@ -846,9 +846,9 @@ func NewApplication(
 			}
 
 			err = upgrades.MintPstakeTokens(ctx, app.LSCosmosKeeper)
-			if err != nil {
-				panic(fmt.Sprintf("failed to mint pstake tokens: %s", err))
-			}
+			//if err != nil {
+			//	panic(fmt.Sprintf("failed to mint pstake tokens: %s", err))
+			//}
 
 			ctx.Logger().Info("start to run module migrations...")
 			newVM, err := app.moduleManager.RunMigrations(ctx, app.configurator, fromVM)

@@ -62,7 +62,6 @@ setup-local-val:
 	kubectl port-forward pods/$(chain)-genesis-0 $(localrpc):26657 &
 	kubectl port-forward pods/$(chain)-genesis-0 $(localp2p):26656 &
 	kubectl port-forward pods/$(chain)-genesis-0 $(localrest):1317 &
-	kubectl port-forward pods/$(chain)-genesis-0 $(localexposer):8081 &
 
 port-forward-exposer:
 	for i in $(shell seq 0 $(num_vals)); do \
