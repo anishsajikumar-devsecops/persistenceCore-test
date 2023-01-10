@@ -154,7 +154,10 @@ spec:
               cat config.toml
 
               # maybe dns needs some time to resolve?
-              sleep 10
+              # sleep 10
+
+              # echo "Sleeping for infinity"
+              # sleep infinity
 
               # Start graph node
               graph-node --config config.toml \

@@ -58,7 +58,7 @@ spec:
     spec:
       initContainers:
         - name: init-genesis
-          image: betterpersist/persistencecore:v5.0.1
+          image: betterpersist/persistencecore:v6.0.0-rc12
           imagePullPolicy: Always
           env:
             - name: COINS
@@ -152,7 +152,7 @@ spec:
               name: addresses
       containers:
         - name: validator
-          image: betterpersist/persistencecore:v5.0.1
+          image: betterpersist/persistencecore:v6.0.0-rc12
           imagePullPolicy: Always
           env:
             - name: CHAIN_ID
@@ -210,5 +210,5 @@ spec:
       accessModes: [ "ReadWriteOnce" ]
       resources:
         requests:
-          storage: 5Gi
+          storage: 20Gi
 ---
