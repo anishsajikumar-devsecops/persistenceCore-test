@@ -19,15 +19,15 @@ if test -f $HOME_DIR/config/genesis.json; then
 else
     echo "Genesis.json does not exist. Initializing node."
 
-NODE_NAME=$(jq -r ".firehose_nodes[$NODE_INDEX].name" /config-graph/firehose-node.json)
-echo "firehose-node Index: $NODE_INDEX, Key name: $NODE_NAME"
+    NODE_NAME=$(jq -r ".firehose_nodes[$NODE_INDEX].name" /config-graph/firehose-node.json)
+    echo "firehose-node Index: $NODE_INDEX, Key name: $NODE_NAME"
 
-# Print mnemonic
-MNEMONIC=$(jq -r ".firehose_nodes[$NODE_INDEX].mnemonic" /config-graph/firehose-node.json)
-echo "Mnemonic: $MNEMONIC"
+    # Print mnemonic
+    MNEMONIC=$(jq -r ".firehose_nodes[$NODE_INDEX].mnemonic" /config-graph/firehose-node.json)
+    echo "Mnemonic: $MNEMONIC"
 
-jq -r ".firehose_nodes[$NODE_INDEX].mnemonic" /config-graph/firehose-node.json | persistenceCore init $NODE_NAME --chain-id $CHAIN_ID --home $HOME_DIR --recover
-echo $MNEMONIC | persistenceCore keys add $NODE_NAME --recover --keyring-backend="test" --home $HOME_DIR
+    jq -r ".firehose_nodes[$NODE_INDEX].mnemonic" /config-graph/firehose-node.json | persistenceCore init $NODE_NAME --chain-id $CHAIN_ID --home $HOME_DIR --recover
+    echo $MNEMONIC | persistenceCore keys add $NODE_NAME --recover --keyring-backend="test" --home $HOME_DIR
 
     # if we have GENESIS_NODE_DATA_RESOLUTION_METHOD is dynamic fetch the genesis from the GENESIS_EXPOSER_PORT on the GENESIS_HOST 
     # else fetch it directly from GENESIS_JSON_FETCH_URL
@@ -43,7 +43,11 @@ echo $MNEMONIC | persistenceCore keys add $NODE_NAME --recover --keyring-backend
 
     GENESIS_NODE_P2P="$GENESIS_NODE_ID@$GENESIS_HOST:$GENESIS_PORT_P2P"
     echo "Node P2P: $GENESIS_NODE_P2P"
-    sed -i "s/persistent_peers = \"\"/persistent_peers = \"$GENESIS_NODE_P2P\"/g" $HOME_DIR/config/config.toml
+
+    # skip persistent_peers if GENESIS_NODE_DATA_RESOLUTION_METHOD is static
+    if [ $GENESIS_NODE_DATA_RESOLUTION_METHOD = "DYNAMIC" ]; then
+        sed -i "s/persistent_peers = \"\"/persistent_peers = \"$GENESIS_NODE_P2P\"/g" $HOME_DIR/config/config.toml
+    fi
     sed -i 's#"tcp://127.0.0.1:26657"#"tcp://0.0.0.0:26657"#g' $HOME_DIR/config/config.toml
     sed -i 's/timeout_commit = "5s"/timeout_commit = "1s"/g' $HOME_DIR/config/config.toml
     sed -i 's/timeout_propose = "3s"/timeout_propose = "1s"/g' $HOME_DIR/config/config.toml
@@ -57,23 +61,21 @@ echo $MNEMONIC | persistenceCore keys add $NODE_NAME --recover --keyring-backend
     echo "Printing the whole config.toml file"
 
     cat << END >> $HOME_DIR/config/config.toml
-    #######################################################
-    ###       Extractor Configuration Options     ###
-    #######################################################
-    [extractor]
-    enabled = true
-    output_file = "stdout"
+        #######################################################
+        ###       Extractor Configuration Options     ###
+        #######################################################
+        [extractor]
+        enabled = true
+        output_file = "stdout"
 END
-
-    cat $HOME_DIR/config/config.toml    
+    
+    cat $HOME_DIR/config/config.toml
 fi
 
 
+
 # if STATE_RESTORE_SNAPSHOT_URL is not empty url and wasm folder doesn't exist, then download and extract the snapshot
-
-
 if [ ! -z "$STATE_RESTORE_SNAPSHOT_URL" ]; then
-
     # also verify that wasm folder is not empty, if it is empty only then download the snapshot
     if [ ! -d "$HOME_DIR/wasm" ] || [ ! "$(ls -A $HOME_DIR/wasm)" ]; then
         echo "Downloading snapshot from $STATE_RESTORE_SNAPSHOT_URL"
