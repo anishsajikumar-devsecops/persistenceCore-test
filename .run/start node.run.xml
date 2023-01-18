@@ -4,6 +4,9 @@
     <working_directory value="$PROJECT_DIR$" />
     <go_parameters value="-i" />
     <parameters value="start" />
+    <envs>
+      <env name="HOME" value="/tmp/trash" />
+    </envs>
     <kind value="FILE" />
     <package value="github.com/persistenceOne/persistenceCore" />
     <directory value="$PROJECT_DIR$/" />

@@ -1,7 +1,7 @@
 #!/bin/bash
 
-OFFSET_HEIGHT=40
-UPGRADE_NAME=v3
+OFFSET_HEIGHT=80
+UPGRADE_NAME=v7
 
 set -o errexit -o nounset -o pipefail -eu
 
