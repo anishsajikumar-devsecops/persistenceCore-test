@@ -22,7 +22,6 @@ setup: setup-cosmovisor
 
 setup-cosmovisor:
 	go install github.com/cosmos/cosmos-sdk/cosmovisor/cmd/cosmovisor@v1.0.0
-	sudo cp $(GOBIN)/cosmovisor /usr/local/bin/cosmovisor
 	mkdir -p $(CHAIN_DIR)/$(CHAIN_DATA_DIR)/cosmovisor/genesis/bin/
 	mkdir -p $(CHAIN_DIR)/$(CHAIN_DATA_DIR)/cosmovisor/upgrades/
 	cp $(CHAIN_BIN) $(CHAIN_DIR)/$(CHAIN_DATA_DIR)/cosmovisor/genesis/bin/
@@ -31,6 +30,7 @@ start:
 	DAEMON_NAME=$(CHAIN_NAME) \
 	HOME=$(CHAIN_DIR) \
 	DAEMON_HOME=$(CHAIN_DIR)/$(CHAIN_DATA_DIR) \
+	DAEMON_ALLOW_DOWNLOAD_BINARIES=true \
 	cosmovisor start --minimum-gas-prices="0.0005uxprt" $(ARGS)
 
 clean:
