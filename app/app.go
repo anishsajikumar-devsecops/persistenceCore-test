@@ -127,8 +127,8 @@ import (
 	tendermintproto "github.com/tendermint/tendermint/proto/tendermint/types"
 	tendermintdb "github.com/tendermint/tm-db"
 
-	appparams "github.com/persistenceOne/persistenceCore/v6/app/params"
-	upgrades "github.com/persistenceOne/persistenceCore/v6/app/upgrades/v6"
+	appparams "github.com/persistenceOne/persistenceCore/v7/app/params"
+	upgrades "github.com/persistenceOne/persistenceCore/v7/app/upgrades/v6"
 )
 
 var DefaultNodeHome string

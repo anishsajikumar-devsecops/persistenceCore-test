@@ -1,6 +1,6 @@
 FILE = config.yaml
 
-HELM_REPO = shuttle
+HELM_REPO = starship
 HELM_CHART = devnet
 HELM_NAME = persistence
 HELM_VERSION = 0.1.10
@@ -10,7 +10,7 @@ HELM_VERSION = 0.1.10
 ###############################################################################
 
 setup:
-	helm repo add $(HELM_REPO) https://anmol1696.github.io/shuttle/
+	helm repo add $(HELM_REPO) https://anmol1696.github.io/starship/
 	helm repo update
 	helm search repo $(HELM_REPO)/$(HELM_CHART) --version $(HELM_VERSION)
 
@@ -30,7 +30,7 @@ delete:
 ###                              Test commands                              ###
 ###############################################################################
 OFFSET_HEIGHT = 50
-UPGRADE_NAME = v6-rc5
+UPGRADE_NAME = v7-rc1
 CHAIN_ID = $(shell yq -r ".chains[0].name" $(FILE))
 
 setup-client: clean-keys

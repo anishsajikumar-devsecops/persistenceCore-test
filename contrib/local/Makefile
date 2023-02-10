@@ -1,9 +1,9 @@
-CHAIN_ID := testing
+CHAIN_ID := local-core-1
 
 GOBIN ?= $(HOME)/go/bin
 CHAIN_NAME ?= persistenceCore
 CHAIN_DIR ?= /tmp/trash
-CHAIN_BIN ?= ./../../build/persistenceCore
+CHAIN_BIN ?= ./../../build/persistenceCorev6
 CHAIN_DATA_DIR ?= .persistenceCore
 WASM_PERMISSIONLESS ?= false
 

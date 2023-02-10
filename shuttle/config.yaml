@@ -1,14 +1,14 @@
 chains:
   - name: core-1
     type: persistencecore
-    numValidators: 4
+    numValidators: 2
     upgrade:
-      enabled: true
+      enabled: false
       type: build
-      genesis: v6.0.0-rc4
+      genesis: v6.1.0
       upgrades:
-        - name: v6-rc5
-          version: anmol/v6-rc5
+        - name: v7-rc1
+          version: manasi/v7-rc1
     ports:
       rpc: 26657
       rest: 1317
