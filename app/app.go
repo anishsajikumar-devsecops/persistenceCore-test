@@ -128,7 +128,6 @@ import (
 	tendermintdb "github.com/tendermint/tm-db"
 
 	appparams "github.com/persistenceOne/persistenceCore/v7/app/params"
-	upgrades "github.com/persistenceOne/persistenceCore/v7/app/upgrades/v6"
 )
 
 var DefaultNodeHome string
@@ -836,19 +835,6 @@ func NewApplication(
 	app.UpgradeKeeper.SetUpgradeHandler(
 		UpgradeName,
 		func(ctx sdk.Context, _ upgradetypes.Plan, fromVM module.VersionMap) (module.VersionMap, error) {
-			ctx.Logger().Info("start to run upgrade migration...")
-
-			//add more upgrade instructions
-			ctx.Logger().Info("running revert of tombstoning")
-			err := upgrades.RevertCosTombstoning(ctx, app.SlashingKeeper, app.MintKeeper, app.BankKeeper, app.StakingKeeper)
-			if err != nil {
-				panic(fmt.Sprintf("failed to revert tombstoning: %s", err))
-			}
-
-			err = upgrades.MintPstakeTokens(ctx, app.LSCosmosKeeper)
-			if err != nil {
-				panic(fmt.Sprintf("failed to mint pstake tokens: %s", err))
-			}
 
 			ctx.Logger().Info("start to run module migrations...")
 			newVM, err := app.moduleManager.RunMigrations(ctx, app.configurator, fromVM)
