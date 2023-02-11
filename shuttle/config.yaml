@@ -3,7 +3,7 @@ chains:
     type: persistencecore
     numValidators: 2
     upgrade:
-      enabled: false
+      enabled: true
       type: build
       genesis: v6.1.0
       upgrades:

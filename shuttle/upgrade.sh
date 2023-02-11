@@ -19,7 +19,7 @@ echo "Starting software upgrade"
 echo "### Submit proposal from val1"
 RESP=$($CHAIN_BIN tx gov submit-proposal software-upgrade $UPGRADE_NAME --yes --title "$UPGRADE_NAME" --description "$UPGRADE_NAME" \
     --upgrade-height $UPGRADE_HEIGHT --from val1 --chain-id $CHAIN_ID --keyring-backend test --deposit 100uxprt \
-    --upgrade-info "https://gist.githubusercontent.com/mkRuby009/f4165d18fbc2a57d248a5da1e1512777/raw/4b766e201dcb0b634c2ff4839705b768fe024d98/v7_binaries.json"
+    --upgrade-info "https://gist.githubusercontent.com/mkRuby009/f4165d18fbc2a57d248a5da1e1512777/raw/d02a72d0bd486094e3f69f26d07302e2ae3ba833/v7_binaries.json"
     --fees 20000uxprt --gas auto --gas-adjustment 1.5 -b block -o json)
 echo "Response: $RESP"
 PROPOSAL_ID=$(echo "$RESP" | jq -r '.logs[0].events[] | select(.type == "submit_proposal") | .attributes[] | select(.key == "proposal_id") | .value')
