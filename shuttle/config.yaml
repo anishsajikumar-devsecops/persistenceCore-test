@@ -1,5 +1,5 @@
 chains:
-  - name: core-1
+  - name: dev-core-1
     type: persistencecore
     numValidators: 2
     upgrade:
@@ -7,8 +7,8 @@ chains:
       type: build
       genesis: v6.1.0
       upgrades:
-        - name: v7-rc1
-          version: manasi/v7-rc1
+        - name: v7-devnet-tests
+          version: manasi/v7-devnet-tests
     ports:
       rpc: 26657
       rest: 1317

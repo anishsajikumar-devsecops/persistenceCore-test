@@ -3,28 +3,28 @@ FILE = config.yaml
 HELM_REPO = starship
 HELM_CHART = devnet
 HELM_NAME = persistence
-HELM_VERSION = 0.1.10
-
+HELM_VERSION = 0.1.15
+NAMESPACE = manasi-devnet-v7
 ###############################################################################
 ###                              Helm commands                              ###
 ###############################################################################
 
 setup:
-	helm repo add $(HELM_REPO) https://anmol1696.github.io/starship/
+	helm repo add $(HELM_REPO) https://mkRuby009.github.io/starship/
 	helm repo update
 	helm search repo $(HELM_REPO)/$(HELM_CHART) --version $(HELM_VERSION)
 
 install: delete
-	helm install -f $(FILE) $(HELM_NAME) $(HELM_REPO)/$(HELM_CHART) --version $(HELM_VERSION)
+	helm install -f $(FILE) $(HELM_NAME) $(HELM_REPO)/$(HELM_CHART) --version $(HELM_VERSION) --namespace $(NAMESPACE)
 
 upgrade:
-	helm upgrade --debug -f $(FILE) $(HELM_NAME) $(HELM_REPO)/$(HELM_CHART) --version $(HELM_VERSION)
+	helm upgrade --debug -f $(FILE) $(HELM_NAME) $(HELM_REPO)/$(HELM_CHART) --version $(HELM_VERSION) --namespace $(NAMESPACE)
 
 debug:
-	helm install --dry-run --debug -f $(FILE) $(HELM_NAME) $(HELM_REPO)/$(HELM_CHART) --version $(HELM_VERSION)
+	helm install --dry-run --debug -f $(FILE) $(HELM_NAME) $(HELM_REPO)/$(HELM_CHART) --version $(HELM_VERSION) --namespace $(NAMESPACE)
 
 delete:
-	-helm delete $(HELM_NAME)
+	-helm delete $(HELM_NAME) --namespace $(NAMESPACE)
 
 ###############################################################################
 ###                              Test commands                              ###
