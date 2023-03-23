@@ -76,22 +76,34 @@ fi
 
 # if STATE_RESTORE_SNAPSHOT_URL is not empty url and wasm folder doesn't exist, then download and extract the snapshot
 if [ ! -z "$STATE_RESTORE_SNAPSHOT_URL" ]; then
-    # also verify that wasm folder is not empty, if it is empty only then download the snapshot
-    if [ ! -d "$HOME_DIR/wasm" ] || [ ! "$(ls -A $HOME_DIR/wasm)" ]; then
-        echo "Downloading snapshot from $STATE_RESTORE_SNAPSHOT_URL"
-        curl $STATE_RESTORE_SNAPSHOT_URL -o $HOME_DIR/snapshot.tar.gz
-        echo "Extracting snapshot"
-        tar -xvf $HOME_DIR/snapshot.tar.gz -C $HOME_DIR
-        rm -rf $HOME_DIR/snapshot.tar.gz
+    echo "=> Downloading snapshot from $STATE_RESTORE_SNAPSHOT_URL"
+    FILENAME=$(basename $STATE_RESTORE_SNAPSHOT_URL)
+    curl $STATE_RESTORE_SNAPSHOT_URL -o $HOME_DIR/$FILENAME
 
-        # Move wasm and data folder out of `temp-testnet-snap` folder with force write 
-        echo "Restoring state from snapshot"
-        ls -lrht $HOME_DIR/temp-testnet-snap
-        mv -f $HOME_DIR/temp-testnet-snap/wasm $HOME_DIR
-        mv -f $HOME_DIR/temp-testnet-snap/data $HOME_DIR
-    else
-        echo "Wasm folder already exists, skipping snapshot download"
-    fi
+    echo "=> Extracting snapshot"
+    cp $HOME_DIR/data/priv_validator_state.json $HOME/priv_validator_state_backup.json
+
+    case "$FILENAME" in
+        *.tar.lz4)
+            if ! command -v lz4 &> /dev/null; then
+                apk add --no-cache lz4
+            fi
+
+            lz4 -c -d $HOME_DIR/$FILENAME | tar -x -C $HOME_DIR
+            # delete the $HOME_DIR/wasm/wasm/cache folder
+            rm -rf $HOME_DIR/wasm/wasm/cache
+            rm -rf $HOME_DIR/$FILENAME
+            ;;
+
+        *.tar.gz)
+            tar -xvf $HOME_DIR/$FILENAME -C $HOME_DIR
+            rm -rf $HOME_DIR/wasm/wasm/cache
+            rm -rf $HOME_DIR/$FILENAME
+            ;;
+    esac
+
+    mv $HOME_DIR/priv_validator_state_backup.json $HOME/data/priv_validator_state.json
+    rm $HOME_DIR/priv_validator_state_backup.json
 fi
 
 # copy the firehose.yml file to the HOME_DIR because config-graph is a read-only volume

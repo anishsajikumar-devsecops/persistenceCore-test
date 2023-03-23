@@ -1,6 +1,6 @@
 resources:
   - firehose-node.yaml
-  - graph-node.yaml
+  # - graph-node.yaml
   - ipfs-node.yaml
   # - hasura.yaml
   - ipfs-persistent-volume.yaml
