@@ -35,8 +35,8 @@ func TestLiquidStakeUnstakeStkXPRT(t *testing.T) {
 		cancelFn()
 	})
 
-	// create a single chain instance with 8 validators
-	validatorsCount := 8
+	// create a single chain instance with 4 validators
+	validatorsCount := 4
 
 	// important overrides: fast voting for quick proposal passing
 	ic, chain := CreateChain(t, ctx, validatorsCount, 0, fastVotingGenesisOverridesKV...)
@@ -78,6 +78,8 @@ func TestLiquidStakeUnstakeStkXPRT(t *testing.T) {
 			LsmDisabled:           false,
 			UnstakeFeeRate:        liquidstaketypes.DefaultUnstakeFeeRate,
 			MinLiquidStakeAmount:  liquidstaketypes.DefaultMinLiquidStakeAmount,
+			FeeAccountAddress:     string(liquidstaketypes.DummyFeeAccountAcc),
+			AutocompoundFeeRate:   liquidstaketypes.DefaultAutocompoundFeeRate,
 		},
 	})
 
@@ -100,6 +102,7 @@ func TestLiquidStakeUnstakeStkXPRT(t *testing.T) {
 		},
 	)
 	require.NoError(t, err, "error submitting liquidstake params update tx")
+	require.Equal(t, 0, txResp.Code, txResp.Data)
 
 	err = testutil.WaitForBlocks(ctx, 1, chain)
 	require.NoError(t, err)

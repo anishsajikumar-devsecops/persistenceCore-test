@@ -121,6 +121,10 @@ func TestLiquidStakeStkXPRT(t *testing.T) {
 		},
 	)
 	require.NoError(t, err, "error submitting liquidstake params update tx")
+	require.Equal(t, 0, txResp.Code, txResp.Data)
+
+	err = testutil.WaitForBlocks(ctx, 1, chain)
+	require.NoError(t, err)
 
 	upgradeTx, err := helpers.QueryProposalTx(context.Background(), chain.Nodes()[0], txResp.TxHash)
 	require.NoError(t, err, "error checking proposal tx")
