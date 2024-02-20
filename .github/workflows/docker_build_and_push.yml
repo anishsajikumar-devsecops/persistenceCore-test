@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - 'CI-branch-test'
+  release:
+    types:
+      - published
 
 env:
   DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
@@ -24,10 +27,21 @@ jobs:
           username: ${{ env.DOCKER_USERNAME }}
           password: ${{ env.DOCKER_PASSWORD }}
 
+      - name: Determine Tag Name
+        id: tag_name
+        run: |
+          if [ "${{ github.event_name }}" = "release" ]; then
+            echo "::set-output name=TAG::${{ github.event.release.tag_name }}"
+          elif [ "${{ github.event_name }}" = "push" ]; then
+            echo "::set-output name=TAG::$(echo ${{ github.ref_name }} | sed 's/[^a-zA-Z0-9_]/-/g')-${{ github.run_number }}"
+          else
+            echo "::set-output name=TAG::fallback-tag"
+          fi
+
       - name: Build and push Docker image
         uses: docker/build-push-action@v3
         with:
           context: .
           file: ./docker/persistencecore/Dockerfile
           push: true
-          tags: ${{ env.IMAGE_NAME }}:latest, ${{ env.IMAGE_NAME }}:${{ github.sha }}
+          tags: ${{ env.IMAGE_NAME }}:${{ steps.tag_name.outputs.TAG }}
