@@ -8,7 +8,7 @@ on:
 env:
   DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
   DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-  IMAGE_NAME: "your-dockerhub-username/your-image-name"
+  IMAGE_NAME: "8857890900/persistencecore_test"
 
 jobs:
   build-and-push-image:
