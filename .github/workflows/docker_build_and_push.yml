@@ -5,7 +5,7 @@ on:
     branches:
       - 'CI-branch-test'
     tags:
-      - 'v*.*.*' # Trigger on version tags
+      - 'v*.*.*' 
   release:
     types:
       - created
@@ -38,8 +38,6 @@ jobs:
           platforms: linux/amd64,linux/arm64
           tags: ${{ env.IMAGE_NAME }}:${{ github.ref_name }}
           push: true
-          # Assuming build-push-action or your custom action supports using a config file
-          # This line is indicative and might need adjustment based on the actual action's capabilities
           build-args: CONFIG_PATH=./chains.yaml
 
   draft-release:
