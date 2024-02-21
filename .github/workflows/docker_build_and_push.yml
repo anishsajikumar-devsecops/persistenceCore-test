@@ -21,26 +21,24 @@ jobs:
       - name: Check out the repo
         uses: actions/checkout@v3
 
-      - name: Print working directory
-        run: |
-          echo "Current working directory:"
-          pwd
-
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
 
       - name: Determine latest version tag
         id: latest-tag
         run: |
+          echo "Current working directory:"
+          pwd
           echo "Listing versions in /app/upgrades:"
           ls -d ./app/upgrades/v* || echo "No version directories found."
           LATEST_VERSION=$(ls -d ./app/upgrades/v* 2>/dev/null | awk -F'[v.]' 'NF==4 && $2~/^[0-9]+$/ && $3~/^[0-9]+$/ && $4~/^[0-9]+$/ {print "v"$2"."$3"."$4}' | sort -V | tail -n1)
           if [[ -z "$LATEST_VERSION" ]]; then
             echo "No version found. Exiting..."
             exit 1
+          else
+            echo "Latest version tag determined: $LATEST_VERSION"
+            echo "LATEST_VERSION=$LATEST_VERSION" >> $GITHUB_ENV
           fi
-          echo "Latest version tag determined: $LATEST_VERSION"
-          echo "LATEST_VERSION=$LATEST_VERSION" >> $GITHUB_ENV
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
