@@ -33,9 +33,12 @@ jobs:
       - name: Determine tag for Docker image
         id: extract-tag
         run: |
-          latest_tag=$(ls -d "${{ github.workspace }}/app/upgrades/v*" 2>/dev/null | awk -F'[v.]' 'NF==4 && $2~/^[0-9]+$/ && $3~/^[0-9]+$/ && $4~/^[0-9]+$/ {print $2"."$3"."$4}' | sort -V | tail -n1)
-          echo "Latest version: $latest_tag"
-          echo "latest_tag=$latest_tag" >> $GITHUB_ENV
+          latest_tag=$(ls -d /github/workspace/persistenceCore-test/app/upgrades/v* 2>/dev/null | awk -F'[v.]' 'NF==4 && $2~/^[0-9]+$/ && $3~/^[0-9]+$/ && $4~/^[0-9]+$/ {print $2"."$3"."$4}' | sort -V | tail -n1)
+          echo "::set-output name=tag::${latest_tag}"
+
+      - name: Print latest version
+        run: |
+          echo "Latest version: ${latest_tag}"
 
       - name: Build and push Docker image with configuration
         uses: docker/build-push-action@v3
@@ -43,7 +46,7 @@ jobs:
           context: .
           file: ./docker/persistencecore/Dockerfile
           platforms: linux/amd64,linux/arm64
-          tags: ${{ env.IMAGE_NAME }}:${{ env.latest_tag }}
+          tags: ${{ env.IMAGE_NAME }}:${{ steps.extract-tag.outputs.tag }}
           push: true
           build-args: CONFIG_PATH=./chains.yaml
 
