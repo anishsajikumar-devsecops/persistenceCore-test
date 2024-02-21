@@ -24,21 +24,18 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
 
+      - name: Determine latest version tag
+        id: latest-tag
+        run: |
+          LATEST_TAG=$(ls -d ./app/upgrades/v* 2>/dev/null | awk -F'[v.]' 'NF==4 && $2~/^[0-9]+$/ && $3~/^[0-9]+$/ && $4~/^[0-9]+$/ {print $2"."$3"."$4}' | sort -V | tail -n1)
+          echo "Latest version tag determined: $LATEST_TAG"
+          echo "::set-output name=version::$LATEST_TAG"
+
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-
-      - name: Determine tag for Docker image
-        id: extract-tag
-        run: |
-          latest_tag=$(ls -d /github/workspace/persistenceCore-test/app/upgrades/v* 2>/dev/null | awk -F'[v.]' 'NF==4 && $2~/^[0-9]+$/ && $3~/^[0-9]+$/ && $4~/^[0-9]+$/ {print $2"."$3"."$4}' | sort -V | tail -n1)
-          echo "::set-output name=tag::${latest_tag}"
-
-      - name: Print latest version
-        run: |
-          echo "Latest version: ${latest_tag}"
 
       - name: Build and push Docker image with configuration
         uses: docker/build-push-action@v3
@@ -46,7 +43,7 @@ jobs:
           context: .
           file: ./docker/persistencecore/Dockerfile
           platforms: linux/amd64,linux/arm64
-          tags: ${{ env.IMAGE_NAME }}:${{ steps.extract-tag.outputs.tag }}
+          tags: ${{ env.IMAGE_NAME }}:v${{ steps.latest-tag.outputs.version }}
           push: true
           build-args: CONFIG_PATH=./chains.yaml
 
@@ -59,10 +56,10 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           draft: true
-          tag_name: ${{ github.ref_name }}
-          name: Release ${{ github.ref_name }}
+          tag_name: v${{ steps.latest-tag.outputs.version }}
+          name: Release v${{ steps.latest-tag.outputs.version }}
           body: |
-            New release of PersistenceCore ${{ github.ref_name }}.
+            New release of PersistenceCore v${{ steps.latest-tag.outputs.version }}.
             Docker images for amd64 and arm64 are now available on Docker Hub.
 
-            `docker pull ${{ env.IMAGE_NAME }}:${{ github.ref_name }}`
+            `docker pull ${{ env.IMAGE_NAME }}:v${{ steps.latest-tag.outputs.version }}`
