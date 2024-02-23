@@ -8,3 +8,4 @@ echo $test_mnemonic | persistenceCore keys add test --recover --keyring-backend 
 persistenceCore genesis add-genesis-account test 100000000000000uxprt,100000000000000stake --keyring-backend test
 persistenceCore genesis gentx test 10000000stake --chain-id test --keyring-backend test
 persistenceCore genesis collect-gentxs
+
