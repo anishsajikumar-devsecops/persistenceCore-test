@@ -17,7 +17,7 @@ require (
 	github.com/cosmos/ibc-go/v7 v7.1.0
 	github.com/gorilla/mux v1.8.1
 	github.com/persistenceOne/persistence-sdk/v2 v2.1.1
-	github.com/persistenceOne/pstake-native/v2 v2.9.2-rc3
+	github.com/persistenceOne/pstake-native/v2 v2.10.0
 	github.com/prometheus/client_golang v1.15.0
 	github.com/rakyll/statik v0.1.7
 	github.com/skip-mev/pob v1.0.1
@@ -60,7 +60,7 @@ require (
 	github.com/coinbase/rosetta-sdk-go v0.7.9 // indirect
 	github.com/confio/ics23/go v0.9.0 // indirect
 	github.com/cosmos/btcutil v1.0.5 // indirect
-	github.com/cosmos/cosmos-proto v1.0.0-beta.3 // indirect
+	github.com/cosmos/cosmos-proto v1.0.0-beta.4 // indirect
 	github.com/cosmos/go-bip39 v1.0.0 // indirect
 	github.com/cosmos/gogogateway v1.2.0 // indirect
 	github.com/cosmos/gogoproto v1.4.10 // indirect
@@ -80,7 +80,6 @@ require (
 	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/dvsekhvalnov/jose2go v1.5.0 // indirect
 	github.com/felixge/httpsnoop v1.0.2 // indirect
-	github.com/figment-networks/proto-cosmos v0.1.1 // indirect
 	github.com/fsnotify/fsnotify v1.6.0 // indirect
 	github.com/getsentry/sentry-go v0.23.0 // indirect
 	github.com/gin-gonic/gin v1.9.1 // indirect
@@ -105,7 +104,6 @@ require (
 	github.com/googleapis/gax-go/v2 v2.12.0 // indirect
 	github.com/gorilla/handlers v1.5.1 // indirect
 	github.com/gorilla/websocket v1.5.0 // indirect
-	github.com/graphprotocol/extractor-cosmos v0.1.1 // indirect
 	github.com/grpc-ecosystem/go-grpc-middleware v1.3.0 // indirect
 	github.com/grpc-ecosystem/grpc-gateway v1.16.0 // indirect
 	github.com/gsterjov/go-libsecret v0.0.0-20161001094733-a6f4afe4910c // indirect
@@ -158,7 +156,6 @@ require (
 	github.com/sasha-s/go-deadlock v0.3.1 // indirect
 	github.com/spf13/afero v1.9.5 // indirect
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect
-	github.com/streamingfast/pbgo v0.0.6-0.20221020131607-255008258d28 // indirect
 	github.com/subosito/gotenv v1.4.2 // indirect
 	github.com/syndtr/goleveldb v1.0.1-0.20220721030215-126854af5e6d // indirect
 	github.com/tendermint/go-amino v0.16.0 // indirect
@@ -188,7 +185,7 @@ require (
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	nhooyr.io/websocket v1.8.6 // indirect
-	pgregory.net/rapid v0.5.5 // indirect
+	pgregory.net/rapid v1.1.0 // indirect
 	sigs.k8s.io/yaml v1.3.0 // indirect
 )
 
@@ -205,11 +202,9 @@ replace (
 // use persistence's forks with LSM implemented
 replace (
 	github.com/CosmWasm/wasmd => github.com/persistenceOne/wasmd v0.40.2-lsm3
-	github.com/cosmos/cosmos-sdk => github.com/persistenceOne/cosmos-sdk v0.47.3-lsm5-fh-fh
+	github.com/cosmos/cosmos-sdk => github.com/persistenceOne/cosmos-sdk v0.47.3-lsm5
 	github.com/cosmos/ibc-apps/middleware/packet-forward-middleware/v7 => github.com/persistenceOne/ibc-apps/middleware/packet-forward-middleware/v7 v7.0.0-20240109170424-f4a8f29910eb
 	github.com/cosmos/ibc-apps/modules/ibc-hooks/v7 => github.com/persistenceOne/ibc-apps/modules/ibc-hooks/v7 v7.0.0-20240109170424-f4a8f29910eb
 	github.com/cosmos/ibc-go/v7 => github.com/persistenceOne/ibc-go/v7 v7.2.0-lsm3
 	github.com/skip-mev/pob => github.com/persistenceOne/pob v1.0.3-lsm3
 )
-
-replace github.com/cometbft/cometbft => github.com/persistenceOne/cometbft v0.37.2-fh

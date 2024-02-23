@@ -23,6 +23,7 @@ WORKDIR /usr/local/app
 
 # Add source files
 COPY . .
+RUN go mod download
 
 # Force it to use static lib (from above) not standard libgo_cosmwasm.so file
 RUN LEDGER_ENABLED=true BUILD_TAGS="muslc linkstatic" LDFLAGS='-linkmode external -extldflags "-static"' make build
