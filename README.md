@@ -1,143 +1,81 @@
-# persistenceCore
+![Persistence Core](https://www.asiacryptotoday.com/wp-content/uploads/2020/09/persistence-protocol.jpg)
 
-[![LoC](https://tokei.rs/b1/github/persistenceOne/persistenceCore)](https://github.com/persistenceOne/persistenceCore)
+[![Lines of Code](https://tokei.rs/b1/github/persistenceOne/persistenceCore)](https://github.com/persistenceOne/persistenceCore) ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/persistenceOne/persistenceCore) ![GitHub contributors](https://img.shields.io/github/contributors/persistenceOne/persistenceCore) ![GitHub stars](https://img.shields.io/github/stars/persistenceOne/persistenceCore?style=social) [![GitHub issues](https://img.shields.io/github/issues/persistenceOne/persistenceCore)](https://github.com/persistenceOne/persistenceCore/issues) ![GitHub forks](https://img.shields.io/github/forks/persistenceOne/persistenceCore?style=social) ![GitHub license](https://img.shields.io/github/license/persistenceOne/persistenceCore) ![GitHub last commit](https://img.shields.io/github/last-commit/persistenceOne/persistenceCore) ![GitHub pull requests](https://img.shields.io/github/issues-pr/persistenceOne/persistenceCore) ![GitHub closed issues](https://img.shields.io/github/issues-closed/persistenceOne/persistenceCore) ![GitHub language count](https://img.shields.io/github/languages/count/persistenceOne/persistenceCore) ![GitHub top language](https://img.shields.io/github/languages/top/persistenceOne/persistenceCore) ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/persistenceOne/persistenceCore) ![GitHub repo size](https://img.shields.io/github/repo-size/persistenceOne/persistenceCore) ![GitHub watchers](https://img.shields.io/github/watchers/persistenceOne/persistenceCore?style=social) ![GitHub release (latest by date)](https://img.shields.io/github/v/release/persistenceOne/persistenceCore)
 
-This project implements an application for the Persistence Core chain that all the other chains in the ecosystem connect
-to as a raised and open moderator for interoperability, shared security, and as a gateway to other ecosystems and
-chains.
+# Persistence Core-1: The Liquid Staking Hub 🚀
 
-## Talk to us!
+![Persistence Core](https://blog.persistence.one/wp-content/uploads/2022/04/Full_Logo_Light.png)
 
-* [Twitter](https://twitter.com/PersistenceOne)
-* [Telegram](https://t.me/PersistenceOneChat)
-* [Discord](https://discord.com/channels/796174129077813248)
+**PersistenceCore** is the backbone of the Persistence ecosystem, utilizing Tendermint to foster a new era of liquid staking and DeFi applications.
 
-## Hardware Requirements
+## 🚀 Features
 
-* **Minimal**
-    * 1 GB RAM
-    * 25 GB HDD
-    * 1.4 GHz CPU
-* **Recommended**
-    * 2 GB RAM
-    * 100 GB HDD
-    * 2.0 GHz x2 CPU
+- **Liquid Staking** 🔓: Mint stkASSETs via [pSTAKE](https://pStake.finance) to earn rewards while engaging in DeFi.
+- **CosmWasm Integration** 🧩: Develop and deploy DeFi apps with smart contract capabilities.
+- **Cross-Chain Functionality** 🌉: Supports assets from Ethereum, Polkadot, and more for enhanced liquidity.
+- **On-Chain Governance** 🗳️: Empowers XPRT holders to guide ecosystem evolution.
 
-> NOTE: SSDs have limited TBW before non-catastrophic data errors. Running a full node requires a TB+ writes per day,
-> causing rapid deterioration of SSDs over HDDs of comparable quality.
+## 🌍 Ecosystem Highlights
 
-## Operating System
+- **[pSTAKE Finance](https://pStake.finance)**: Unlock your staked assets' liquidity.
+- **[AUDIT.one](https://audit.one)**: Secure PoS networks with our staking service.
+- **DEXter**: Yield-generating interchain DEX.
 
-* Linux/Windows/MacOS(x86)
-* **Recommended**
-    * Linux(x86_64)
+## 📢 Talk to us!
 
-## Installation Steps
+We're active and ready to connect with you on various platforms:
 
-> Prerequisite: Go 1.21.0+ required. [ref](https://golang.org/doc/install)
+- **Twitter**: [Follow us](https://twitter.com/PersistenceOne) 🐦
+- **Telegram**: [Join our chat](https://t.me/PersistenceOneChat) 💬
+- **Discord**: [Become part of our community](https://discord.com/channels/796174129077813248) 🎧
 
-> Prerequisite: git. [ref](https://github.com/git/git)
+## 💻 Hardware Requirements
 
-> Optional requirement: GNU make. [ref](https://www.gnu.org/software/make/manual/html_node/index.html)
+Whether you're just getting started or setting up a production environment, here's what you'll need:
 
-* Clone git repository
+- **Minimal Setup**
 
-```shell
-git clone https://github.com/persistenceOne/persistenceCore.git
-```
+  - 🗃️ **RAM**: 1 GB
+  - 💾 **HDD**: 25 GB
+  - 🖥️ **CPU**: 1.4 GHz
+- **Recommended Setup**
 
-* Checkout release tag
+  - 🗃️ **RAM**: 2 GB
+  - 💾 **HDD**: 100 GB
+  - 🖥️ **CPU**: 2.0 GHz x2
 
-```shell
-git fetch --tags
-git checkout [vX.X.X]
-```
+> 🚨 **Note**: 🚀 SSDs, while faster, have limited TBW (Total Bytes Written) and can deteriorate quickly under the load of running a full node, which requires significant data writing activities.
 
-* Install
+## 🖥 Operating System Compatibility
 
-```shell
-cd persistenceCore
-make all
-```
+Ensuring your system runs smoothly with persistenceCore:
 
-### Generate keys
+- **Supported Operating Systems**
 
-`persistenceCore keys add [key_name]`
+  - 🐧 **Linux** (x86)
+  - 🪟 **Windows** (x86)
+  - 🍏 **MacOS** (x86)
+- **Recommended for Optimal Performance**
 
-or
+  - 🐧 **Linux** (x86_64) - Leveraging the full potential of Linux for stability and performance.
 
-`persistenceCore keys add [key_name] --recover` to regenerate keys with
-your [BIP39](https://github.com/bitcoin/bips/tree/master/bip-0039) mnemonic
+## 🌍 Join Our Networks
 
-### Connect to a chain and start node
+- **Test-nets**: Explore and test within our sandbox environment [test-core-2](https://docs.persistence.one/build/nodes-and-endpoints/join-testnet)
+- **Main-net**: Join the live network [core-1](https://docs.persistence.one/build/nodes-and-endpoints/join-mainnet)
 
-* [Install](#installation-steps) persistenceCore application
-* Initialize node
+## 🛠 Get Involved
 
-```shell
-persistenceCore init [NODE_NAME]
-```
+Whether you're a **developer**, **validator**, or **enthusiast**, join us in shaping the future of finance.
 
-* Replace `${HOME}/.persistenceCore/config/genesis.json` with the genesis file of the chain.
-* Add `persistent_peers` or `seeds` in `${HOME}/.persistenceCore/config/config.toml`
-* Start node
+- [📖 Docs](https://docs.persistence.one/)
 
-```shell
-persistenceCore start
-```
+---
 
-### Initialize a new chain and start node
+🔁 *Continuously evolving, persistenceCore aims to be at the forefront of blockchain technology, paving the way for a more interconnected and secure digital future.*
 
-* Initialize: `persistenceCore init [node_name] --chain-id [chain_name]`
-* Add key for genesis account `persistenceCore keys add [genesis_key_name]`
-* Add genesis account `persistenceCore add-genesis-account [genesis_key_name] 10000000000000000000stake`
-* Create a validator at genesis `persistenceCore gentx [genesis_key_name] 10000000stake --chain-id [chain_name]`
-* Collect genesis transactions `persistenceCore collect-gentxs`
-* Start node `persistenceCore start`
-* To start rest server set `enable=true` in `config/app.toml` under `[api]` and restart the chain
+## Contributors ❤
 
-### Ledger Support
-
-> NOTE: *If you are using Cosmos Ledger app*: Persistence uses coin-type 750; generating keys through this method below
-> will create keys with coin-type 118(cosmos) and will only be supported by CLI and not by current or future wallets.
-
-* Install the Persistence application on the Ledger
-  device. [ref](https://github.com/persistenceOne/persistenceCore/blob/main/docs/resources/Ledger.md#install-the-persistence-ledger-application)
-* Connect the Ledger device to a system with persistenceCore binary and open the Persistence application on it.
-* Add key
-
-```shell
-persistenceCore keys add [key_name] --ledger
-```
-
-* Sign transaction
-
-```shell
-persistenceCore tx [transaction parameters] --ledger
-```
-
-### Reset chain
-
-```shell
-rm -rf ~/.persistenceCore
-```
-
-### Shutdown node
-
-```shell
-killall persistenceCore
-```
-
-### Check version
-
-```shell
-persistenceCore version
-```
-
-## Test-nets
-
-* [test-core-2](https://github.com/persistenceOne/genesisTransactions/tree/master/test-core-2)
-
-## Main-net
-
-* [core-1](https://github.com/persistenceOne/genesisTransactions/tree/master/core-1)
+<a href="https://github.com/persistenceOne/persistenceCore/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=persistenceOne/persistenceCore"/>
+</a>
