@@ -2,24 +2,30 @@
 
 [![Lines of Code](https://tokei.rs/b1/github/persistenceOne/persistenceCore)](https://github.com/persistenceOne/persistenceCore) ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/persistenceOne/persistenceCore) ![GitHub contributors](https://img.shields.io/github/contributors/persistenceOne/persistenceCore) ![GitHub stars](https://img.shields.io/github/stars/persistenceOne/persistenceCore?style=social) [![GitHub issues](https://img.shields.io/github/issues/persistenceOne/persistenceCore)](https://github.com/persistenceOne/persistenceCore/issues) ![GitHub forks](https://img.shields.io/github/forks/persistenceOne/persistenceCore?style=social) ![GitHub license](https://img.shields.io/github/license/persistenceOne/persistenceCore) ![GitHub last commit](https://img.shields.io/github/last-commit/persistenceOne/persistenceCore) ![GitHub pull requests](https://img.shields.io/github/issues-pr/persistenceOne/persistenceCore) ![GitHub closed issues](https://img.shields.io/github/issues-closed/persistenceOne/persistenceCore) ![GitHub language count](https://img.shields.io/github/languages/count/persistenceOne/persistenceCore) ![GitHub top language](https://img.shields.io/github/languages/top/persistenceOne/persistenceCore) ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/persistenceOne/persistenceCore) ![GitHub repo size](https://img.shields.io/github/repo-size/persistenceOne/persistenceCore) ![GitHub watchers](https://img.shields.io/github/watchers/persistenceOne/persistenceCore?style=social) ![GitHub release (latest by date)](https://img.shields.io/github/v/release/persistenceOne/persistenceCore)
 
-# Persistence Core-1: The Liquid Staking Hub 🚀
+# Persistence Core-1: Revolutionizing Liquid Staking 🌌🚀
 
 ![Persistence Core](https://blog.persistence.one/wp-content/uploads/2022/04/Full_Logo_Light.png)
 
-**PersistenceCore** is the backbone of the Persistence ecosystem, utilizing Tendermint to foster a new era of liquid staking and DeFi applications.
+**PersistenceCore** is at the heart of the Persistence ecosystem, utilizing the power of Tendermint for blockchain consensus. Our vision is to bridge various blockchain networks, facilitating a unified ecosystem for liquid staking and decentralized finance (DeFi) applications. By enabling assets to flow freely across blockchains, we aim to unlock new possibilities for asset utilization and yield generation.
 
-## 🚀 Features
+## 🚀 What Makes Persistence Core Unique?
 
-- **Liquid Staking** 🔓: Mint stkASSETs via [pSTAKE](https://pStake.finance) to earn rewards while engaging in DeFi.
-- **CosmWasm Integration** 🧩: Develop and deploy DeFi apps with smart contract capabilities.
-- **Cross-Chain Functionality** 🌉: Supports assets from Ethereum, Polkadot, and more for enhanced liquidity.
-- **On-Chain Governance** 🗳️: Empowers XPRT holders to guide ecosystem evolution.
+- **Liquid Staking** 🔓: We allow users to mint stkASSETs through [pSTAKE](https://pStake.finance), providing a way to earn rewards on staked assets while still participating in the broader DeFi ecosystem. This means you can have your assets work double-time for you—staking rewards plus DeFi yields.
+
+- **CosmWasm Integration** 🧩: Our platform leverages CosmWasm for smart contract functionality, making it possible for developers to build and deploy complex DeFi applications with ease. This opens up a world of possibilities for creating interoperable applications that can communicate across different blockchains.
+
+- **Cross-Chain Functionality** 🌉: The core feature of Persistence is its ability to support assets from various blockchains like Ethereum and Polkadot, enhancing liquidity and connectivity between different ecosystems. This is crucial for the seamless exchange of value and information across networks.
+
+- **On-Chain Governance** 🗳️: At Persistence, we believe in decentralized decision-making. XPRT holders have the power to vote on proposals, guiding the evolution of the ecosystem. This democratic approach ensures that the community's voice is heard and that the platform evolves in a direction that benefits all stakeholders.
 
 ## 🌍 Ecosystem Highlights
 
-- **[pSTAKE Finance](https://pStake.finance)**: Unlock your staked assets' liquidity.
-- **[AUDIT.one](https://audit.one)**: Secure PoS networks with our staking service.
-- **DEXter**: Yield-generating interchain DEX.
+- **[pSTAKE Finance](https://pStake.finance)**: A groundbreaking platform that unlocks the liquidity of staked assets. With pSTAKE, users can stake their assets and receive stkASSETs in return, which can then be used across various DeFi protocols to earn additional yields.
+
+- **[AUDIT.one](https://audit.one)**: Our staking service that provides security and operational efficiency for proof-of-stake (PoS) networks. By ensuring the integrity and reliability of network validators, AUDIT.one plays a critical role in maintaining the health and security of the blockchain ecosystem.
+
+- **DEXter**: An innovative decentralized exchange (DEX) that facilitates the trading of assets between different blockchains. By providing a platform for interchain liquidity, DEXter aims to enhance the efficiency and accessibility of DeFi markets.
+
 
 ## 📢 Talk to us!
 
@@ -64,18 +70,32 @@ Ensuring your system runs smoothly with persistenceCore:
 - **Test-nets**: Explore and test within our sandbox environment [test-core-2](https://docs.persistence.one/build/nodes-and-endpoints/join-testnet)
 - **Main-net**: Join the live network [core-1](https://docs.persistence.one/build/nodes-and-endpoints/join-mainnet)
 
-## 🛠 Get Involved
+## 🛠 How to Contribute
 
-Whether you're a **developer**, **validator**, or **enthusiast**, join us in shaping the future of finance.
+Whether you're a developer interested in building on Persistence, a validator keen on securing the network, or simply an enthusiast eager to learn more, we welcome your contribution! Here are a few ways to get involved:
 
-- [📖 Docs](https://docs.persistence.one/)
+1. **Documentation**: Start by reading our [comprehensive docs](https://docs.persistence.one/) to understand how Persistence works and how you can contribute.
+2. **Code Contributions**: Check out the [Persistence Core GitHub repository](https://github.com/persistenceOne/persistenceCore) for open issues or propose new features or improvements.
+3. **Community Support**: Join our community channels on Discord or Telegram to help new users, answer questions, and share your knowledge.
+
 
 ---
 
-🔁 *Continuously evolving, persistenceCore aims to be at the forefront of blockchain technology, paving the way for a more interconnected and secure digital future.*
+🔁 *Persistence Core is more than just a platform; it's a community-driven project aimed at reshaping the financial landscape. Together, we can build a more interconnected, efficient, and inclusive financial ecosystem.*
 
 ## Contributors ❤
+
+Join our growing list of contributors who are making a significant impact:
 
 <a href="https://github.com/persistenceOne/persistenceCore/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=persistenceOne/persistenceCore"/>
 </a>
+
+<br/>
+
+<p align="center"><a href="https://github.com/nastyox/Rando.js#nastyox"><img src="http://randojs.com/images/barsSmallTransparentBackground.gif" alt="Animated footer bars" width="100%"/></a></p>
+
+<br/>
+
+<p align="center"><a href="https://github.com/persistenceOne/persistenceCore#"><img src="http://randojs.com/images/backToTopButtonTransparentBackground.png" alt="Back to top" height="29"/></a></p>
+
